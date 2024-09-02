@@ -27,9 +27,6 @@ public class Game {
     @Column(nullable = false)
     private Boolean isStore;
 
-    @OneToOne
-    private Store store;
-
     @ManyToOne
     private Player player;
 

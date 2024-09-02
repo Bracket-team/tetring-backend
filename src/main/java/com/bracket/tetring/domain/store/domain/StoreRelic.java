@@ -26,4 +26,6 @@ public class StoreRelic {
 
     @Column(nullable = false)
     private Integer slotNumber;
+
+    private Integer price;
 }

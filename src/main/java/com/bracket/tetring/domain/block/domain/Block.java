@@ -8,19 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@IdClass(BlockId.class)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Block {
     @Id
-    private Integer blockId;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
-    private Game game;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long blockId;
 
     @Column(nullable = false)
     private String color;
@@ -28,7 +23,13 @@ public class Block {
     @Column(nullable = false)
     private String shape;
 
+    @ManyToOne
+    @JoinColumn(name = "game_id", nullable = false)
+    private Game game;
+
     private Boolean isStore;
 
     private Integer slotNumber;
+
+    private Integer price;
 }

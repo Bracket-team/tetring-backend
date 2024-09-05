@@ -2,7 +2,6 @@ package com.bracket.tetring.domain.relic.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor

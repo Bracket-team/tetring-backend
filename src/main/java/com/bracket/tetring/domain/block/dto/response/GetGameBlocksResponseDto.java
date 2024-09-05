@@ -13,7 +13,7 @@ import java.util.List;
 import static com.bracket.tetring.domain.block.dto.GetGameBlockDto.convertToGameBlockDtoList;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class GetGameBlocksResponseDto {
     private String status;
     private Data data;

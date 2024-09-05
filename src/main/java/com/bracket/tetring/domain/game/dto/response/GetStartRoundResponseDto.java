@@ -18,7 +18,7 @@ import static com.bracket.tetring.domain.block.dto.GetGameBlockDto.convertToGame
 import static com.bracket.tetring.domain.relic.dto.GetGameRelicDto.convertToGameRelicDtoList;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class GetStartRoundResponseDto {
     private String status;
     private Data data;

@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.bracket.tetring.domain.block.dto.GetGameBlockDto.convertToGameBlockDtoList;
@@ -25,7 +24,7 @@ import static com.bracket.tetring.domain.relic.dto.GetGameRelicDto.convertToGame
 import static com.bracket.tetring.domain.relic.dto.GetStoreRelicDto.convertToStoreRelicDtoList;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class GetPlayGameResponseDto {
     private String status;
     private Data data;

@@ -13,7 +13,7 @@ import java.util.List;
 import static com.bracket.tetring.domain.relic.dto.GetGameRelicDto.convertToGameRelicDtoList;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class GetGameRelicsResponseDto {
     private String status;
     private Data data;

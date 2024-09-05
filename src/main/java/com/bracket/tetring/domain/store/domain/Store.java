@@ -14,6 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Store {
     @Id
+    private Long storeId;
+
     @OneToOne
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;

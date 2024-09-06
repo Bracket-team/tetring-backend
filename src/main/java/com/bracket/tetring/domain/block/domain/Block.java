@@ -26,10 +26,4 @@ public class Block {
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
-
-    private Boolean isStore;
-
-    private Integer slotNumber;
-
-    private Integer price;
 }

@@ -34,5 +34,5 @@ public class Game {
     private Long bestScore;
 
     @Column(nullable = false)
-    private Boolean is_playing;
+    private Boolean isPlaying;
 }

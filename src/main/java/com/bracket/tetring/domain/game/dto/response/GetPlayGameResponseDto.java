@@ -1,6 +1,7 @@
 package com.bracket.tetring.domain.game.dto.response;
 
 import com.bracket.tetring.domain.block.domain.Block;
+import com.bracket.tetring.domain.block.domain.StoreBlock;
 import com.bracket.tetring.domain.block.dto.GetGameBlockDto;
 import com.bracket.tetring.domain.block.dto.GetStoreBlockDto;
 import com.bracket.tetring.domain.game.domain.Game;
@@ -29,7 +30,7 @@ public class GetPlayGameResponseDto {
     private String status;
     private Data data;
 
-    public GetPlayGameResponseDto(Game game, int round_goal, List<Block> playerBlocks, List<GameRelic> playerRelics, Store store, int moneyLevelUpPrice, List<Block> storeBlocks, List<StoreRelic> storeRelics) {
+    public GetPlayGameResponseDto(Game game, int round_goal, List<Block> playerBlocks, List<GameRelic> playerRelics, Store store, int moneyLevelUpPrice, List<StoreBlock> storeBlocks, List<StoreRelic> storeRelics) {
         this.status = "success";
         this.data = new Data(new GetGameDto(game, round_goal), convertToGameBlockDtoList(playerBlocks), convertToGameRelicDtoList(playerRelics), new GetStoreDto(store, moneyLevelUpPrice), convertToStoreBlockDtoList(storeBlocks), convertToStoreRelicDtoList(storeRelics));
     }

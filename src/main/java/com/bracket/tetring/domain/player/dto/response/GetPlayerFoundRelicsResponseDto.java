@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
-public class GetPlayerFoundRelicsResponse {
+@AllArgsConstructor
+public class GetPlayerFoundRelicsResponseDto {
     private String status;
     private Data data;
 
-    public GetPlayerFoundRelicsResponse(List<Relic> playerFoundRelics) {
+    public GetPlayerFoundRelicsResponseDto(List<Relic> playerFoundRelics) {
         this.status = "success";
         this.data = new Data(convertToDtoList(playerFoundRelics));
     }

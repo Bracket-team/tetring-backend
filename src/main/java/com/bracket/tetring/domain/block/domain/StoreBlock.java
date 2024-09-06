@@ -13,8 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StoreBlock {
     @Id
-    @Column(name = "block_id")
-    private Long blockID;
+    @Column(name = "store_block_id")
+    private Long storeBlockId;
 
     private Integer slotNumber;
 
@@ -22,6 +22,6 @@ public class StoreBlock {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "blcok_id")
+    @JoinColumn(name = "store_block_id")
     private Block block;
 }

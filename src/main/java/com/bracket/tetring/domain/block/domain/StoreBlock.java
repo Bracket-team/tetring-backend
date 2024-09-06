@@ -12,6 +12,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreBlock {
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "block_id")
+    private Block block;
+
     @Id
     @Column(name = "store_block_id")
     private Long storeBlockId;
@@ -19,9 +24,4 @@ public class StoreBlock {
     private Integer slotNumber;
 
     private Integer price;
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "store_block_id")
-    private Block block;
 }

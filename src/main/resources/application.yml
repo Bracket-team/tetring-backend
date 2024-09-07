@@ -48,5 +48,3 @@ spring:
             user-info-authentication-method: header
             user-name-attribute: id # Kakao 응답 값 id, connected_at, properties, kakao_account 중 id 지정
 
-jwt:
-  key:

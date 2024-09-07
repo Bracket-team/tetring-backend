@@ -49,4 +49,4 @@ spring:
             user-name-attribute: id # Kakao 응답 값 id, connected_at, properties, kakao_account 중 id 지정
 
 jwt:
-  key: '762fbb88b5ecf34e19bc4d87b3cb82bb481bbec67a85dd80844f570a03c2dae7492d3e3bdc957265dae6a8aece143b260a8903650e370416c4523dddb790bbd7'
+  key:

@@ -1,12 +1,11 @@
 package com.bracket.tetring.domain.player.domain;
 
+import com.bracket.tetring.global.oauth2.user.OAuth2Provider;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -19,19 +18,21 @@ public class Player {
     private Long id;
 
     @Column(nullable = false)
-    private String provider;
-
-    @Column(nullable = false)
-    private String providerId;
+    private OAuth2Provider provider;
 
     private String username;
     private String email;
     private String profileImageUrl;
 
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    public Player(OAuth2Provider provider, String username, String email, String profileImageUrl, Role role) {
+        this.provider = provider;
+        this.username = username;
+        this.email = email;
+        this.profileImageUrl = profileImageUrl;
+        this.role = role;
     }
 }

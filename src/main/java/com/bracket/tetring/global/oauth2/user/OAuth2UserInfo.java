@@ -1,5 +1,7 @@
 package com.bracket.tetring.global.oauth2.user;
 
+import com.bracket.tetring.domain.player.domain.Player;
+
 import java.util.Map;
 
 public interface OAuth2UserInfo {
@@ -23,4 +25,7 @@ public interface OAuth2UserInfo {
     String getNickname();
 
     String getProfileImageUrl();
+
+    public Player toEntity();
 }
+

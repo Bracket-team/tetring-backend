@@ -1,5 +1,8 @@
 package com.bracket.tetring.global.oauth2.user;
 
+import com.bracket.tetring.domain.player.domain.Player;
+import com.bracket.tetring.domain.player.domain.Role;
+
 import java.util.Map;
 
 public class NaverOAuth2UserInfo implements OAuth2UserInfo {
@@ -24,7 +27,6 @@ public class NaverOAuth2UserInfo implements OAuth2UserInfo {
         this.firstName = null;
         this.lastName = null;
         this.nickName = (String) attributes.get("nickname");
-        ;
         this.profileImageUrl = (String) attributes.get("profile_image");
     }
 
@@ -76,5 +78,10 @@ public class NaverOAuth2UserInfo implements OAuth2UserInfo {
     @Override
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    @Override
+    public Player toEntity() {
+        return new Player(OAuth2Provider.NAVER, this.name, this.email, this.profileImageUrl, Role.USER);
     }
 }

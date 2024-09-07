@@ -1,5 +1,7 @@
 package com.bracket.tetring.global.oauth2.service;
 
+import com.bracket.tetring.domain.player.domain.Player;
+import com.bracket.tetring.domain.player.repository.PlayerRepository;
 import com.bracket.tetring.global.oauth2.exception.OAuth2AuthenticationProcessingException;
 import com.bracket.tetring.global.oauth2.user.OAuth2UserInfo;
 import com.bracket.tetring.global.oauth2.user.OAuth2UserInfoFactory;
@@ -13,9 +15,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Map;
+
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+    private final PlayerRepository playerRepository;
 
     //loadUser는 사용자의 정보를 가져오는 핵심 메소드
     @Override
@@ -47,7 +52,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
+        Player player = getOrSave(oAuth2UserInfo);
 
-        return new OAuth2UserPrincipal(oAuth2UserInfo);
+        return new OAuth2UserPrincipal(player, oAuth2UserInfo);
+    }
+
+    private Player getOrSave(OAuth2UserInfo oAuth2UserInfo) {
+        Player player = playerRepository.findPlayerByEmail(oAuth2UserInfo.getEmail())
+                .orElseGet(oAuth2UserInfo::toEntity);
+        return playerRepository.save(player);
     }
 }

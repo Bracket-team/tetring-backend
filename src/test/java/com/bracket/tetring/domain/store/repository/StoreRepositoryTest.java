@@ -2,7 +2,6 @@ package com.bracket.tetring.domain.store.repository;
 
 import com.bracket.tetring.domain.game.domain.Game;
 import com.bracket.tetring.domain.game.repository.GameRepository;
-import com.bracket.tetring.domain.player.domain.Player;
 import com.bracket.tetring.domain.store.domain.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest  // JPA 관련 테스트를 위한 어노테이션
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // H2 인메모리 DB를 사용

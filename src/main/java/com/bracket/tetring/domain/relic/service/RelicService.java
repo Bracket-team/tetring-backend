@@ -119,7 +119,9 @@ public class RelicService {
     }
 
     @Transactional
-    public ResponseEntity<?> rerollRelic(Game game, Store store) {
+    public ResponseEntity<?> rerollRelic() {
+        Game game = gameService.findPlayingGame();
+        Store store = storeService.findPlayingStore();
         int money = store.getMoney();
         int rerollPrice = store.getRerollPrice();
         if (money >= rerollPrice) {

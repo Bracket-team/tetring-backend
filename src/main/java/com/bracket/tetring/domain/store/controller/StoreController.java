@@ -68,4 +68,9 @@ public class StoreController {
             return relicService.purchaseStoreRelic(requestDto.getSlotNumber());
         }
     }
+
+    @GetMapping("/relics/reroll")
+    public ResponseEntity<?> rerollRelics() {
+        return relicService.rerollRelic();
+    }
 }

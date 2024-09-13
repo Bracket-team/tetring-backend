@@ -5,6 +5,7 @@ import com.bracket.tetring.domain.relic.domain.Relic;
 import com.bracket.tetring.domain.relic.repository.RelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
+import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +16,15 @@ import java.util.Random;
 @Component
 public class RelicSelector {
     private final RelicRepository relicRepository;
+    private final StoreRelicRepository storeRelicRepository;
     private final Random random = new Random();
 
     private List<Relic> allRelics;
 
     @Autowired
-    public RelicSelector(RelicRepository relicRepository) {
+    public RelicSelector(RelicRepository relicRepository, StoreRelicRepository storeRelicRepository) {
         this.relicRepository = relicRepository;
+        this.storeRelicRepository = storeRelicRepository;
         loadRelicsFromRepository();
     }
 
@@ -46,6 +49,7 @@ public class RelicSelector {
             if (storeRelics.stream().noneMatch(storeRelic -> storeRelic.getRelic().equals(relic))) {
                 StoreRelic storeRelic = new StoreRelic(store, relic, slotNumber++, GameSettings.getPriceByRarity(relic.getRarity()));
                 storeRelics.add(storeRelic);
+                storeRelicRepository.save(storeRelic);
             }
         }
 

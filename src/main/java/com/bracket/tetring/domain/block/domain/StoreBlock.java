@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "store_block")
+@Entity
+@Table(name = "store_block")
 @Getter
 @Setter
 @NoArgsConstructor

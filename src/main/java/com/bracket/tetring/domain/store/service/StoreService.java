@@ -7,9 +7,11 @@ import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.dto.response.GetMoneyResponseDto;
 import com.bracket.tetring.domain.store.dto.response.GetStoreInfoResponseDto;
+import com.bracket.tetring.domain.store.dto.response.UpdateMoneyLevelUpResponseDto;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import com.bracket.tetring.domain.store.repository.StoreRepository;
 import com.bracket.tetring.global.handler.CustomValidationException;
+import com.bracket.tetring.global.util.GameSettings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +42,30 @@ public class StoreService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getGameMoney(Store store) {
         return ResponseEntity.status(HttpStatus.OK).body(new GetMoneyResponseDto(store));
+    }
+
+    @Transactional
+    public ResponseEntity<?> patchMoneyLevelUp(Store store) {
+        int money = store.getMoney();
+        int moneyLevel = store.getMoneyLevel();
+        int levelUpPrice = getMoneyLevelUpPrice(moneyLevel);
+        if(money >= levelUpPrice && moneyLevel < 5) {
+            // 레벨 업을 할 수 있는 경우
+            boolean can_buy = true;
+            //보유 돈 감소
+            money -= levelUpPrice;
+            store.setMoney(money);
+            //머니 레벨 업
+            moneyLevel += 1;
+            store.setMoneyLevel(moneyLevel);
+            levelUpPrice = getMoneyLevelUpPrice(moneyLevel);
+            return ResponseEntity.status(HttpStatus.OK).body(new UpdateMoneyLevelUpResponseDto(can_buy, levelUpPrice, money));
+        }
+        else {
+            // 레벨 업을 할 수 없는 경우
+            boolean can_buy = false;
+
+            return ResponseEntity.status(HttpStatus.OK).body(new UpdateMoneyLevelUpResponseDto(can_buy, levelUpPrice, money));
+        }
     }
 }

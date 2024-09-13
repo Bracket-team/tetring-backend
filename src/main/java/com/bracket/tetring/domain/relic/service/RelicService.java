@@ -14,6 +14,7 @@ import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.CustomValidationException;
 import com.bracket.tetring.global.util.GameSettings;
 import com.bracket.tetring.global.util.RelicSelector;
+import com.bracket.tetring.global.util.RerollPriceCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,9 @@ import static com.bracket.tetring.global.util.GameSettings.REROLL_UPDATE_PRICE;
 public class RelicService {
     private final GameRelicRepository gameRelicRepository;
     private final StoreRelicRepository storeRelicRepository;
+
     private final RelicSelector relicSelector;
+    private final RerollPriceCalculator rerollPriceCalculator;
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getGameRelics(Game game) {
@@ -85,7 +88,7 @@ public class RelicService {
     }
 
     @Transactional
-    public ResponseEntity<?> rerollRelic(Store store) {
+    public ResponseEntity<?> rerollRelic(Game game, Store store) {
         int money = store.getMoney();
         int rerollPrice = store.getRerollPrice();
         if (money >= rerollPrice) {
@@ -95,7 +98,7 @@ public class RelicService {
             money -= rerollPrice;
             store.setMoney(money);
             //리롤 가격 조정
-            rerollPrice += REROLL_UPDATE_PRICE;
+            rerollPrice = rerollPriceCalculator.getRerollPrice(game, store);
             store.setRerollPrice(rerollPrice);
 
             //상점에 있는 유물들 다 버리고 새로 뽑아야 함

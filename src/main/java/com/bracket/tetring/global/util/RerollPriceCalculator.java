@@ -15,21 +15,34 @@ public class RerollPriceCalculator {
     private final GameRelicRepository gameRelicRepository;
 
     public int getInitPrice(Game game) {
-        boolean couponRelic = gameRelicRepository.findByGameAndRelicNumber(game, 10).isPresent();
-        if(!couponRelic) {
-            return REROLL_INITIAL_PRICE;
+        boolean couponBlock = gameRelicRepository.findByGameAndRelicNumber(game, 10).isPresent();
+        boolean rerollBlock = gameRelicRepository.findByGameAndRelicNumber(game, 4).isPresent();
+        if(!couponBlock) {
+            int rerollPrice = REROLL_INITIAL_PRICE;
+            if(rerollBlock)
+                rerollPrice -= 1;
+            return Math.max(rerollPrice, 0);
         } else {
             return 0;
         }
     }
 
     public int getRerollPrice(Game game, Store store) {
-        boolean couponRelic = gameRelicRepository.findByGameAndRelicNumber(game, 10).isPresent();
-        if (!couponRelic || store.getUseCoupon()) {
-            return store.getRerollPrice() + REROLL_UPDATE_PRICE;
+        boolean couponBlock = gameRelicRepository.findByGameAndRelicNumber(game, 10).isPresent();
+        boolean rerollBlock = gameRelicRepository.findByGameAndRelicNumber(game, 4).isPresent();
+        if (!couponBlock || store.getUseCoupon()) {
+            int rerollPrice = store.getRerollPrice() + REROLL_UPDATE_PRICE;
+            if(rerollBlock) {
+                rerollPrice -= 1;
+            }
+            return Math.max(rerollPrice, 0);
         } else {
+            int rerollPrice = REROLL_INITIAL_PRICE;
+            if(rerollBlock) {
+                rerollPrice -= 1;
+            }
             store.setUseCoupon(true);
-            return REROLL_INITIAL_PRICE;
+            return Math.max(rerollPrice, 0);
         }
     }
 }

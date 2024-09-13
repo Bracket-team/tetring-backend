@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/games")
 public class RelicController {
-    private RelicService relicService;
+    private final RelicService relicService;
 
     @GetMapping("/relics")
     public ResponseEntity<?> getPlayerRelics() {

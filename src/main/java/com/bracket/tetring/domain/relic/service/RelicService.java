@@ -4,8 +4,6 @@ import com.bracket.tetring.domain.block.domain.Block;
 import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
 import com.bracket.tetring.domain.game.service.GameService;
-import com.bracket.tetring.domain.player.domain.Player;
-import com.bracket.tetring.domain.player.service.PlayerService;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.dto.response.GetGameRelicsResponseDto;
 import com.bracket.tetring.domain.relic.dto.response.GetRelicExistResponseDto;

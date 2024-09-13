@@ -143,7 +143,7 @@ public class GameService {
             }
             boolean investmentBlock = gameRelicRepository.findByGameAndRelicNumber(game, 20).isPresent();//투자 블록
             if(investmentBlock) {
-                nextMoney += Math.max(10, (int)(nextMoney / 4));
+                nextMoney += Math.max(10, (nextMoney / 4));
             }
             GameRelic destructionBlock = gameRelicRepository.findByGameAndRelicNumber(game, 28).orElse(null); // 파괴 블록
             if(destructionBlock != null) {

@@ -17,7 +17,7 @@ public class GetGameResultResponseDto {
     private String status;
     private Data data;
 
-    public GetGameResultResponseDto(int roundNumber, int bestScore, int blockCount, Store store, List<GameRelic> relics) {
+    public GetGameResultResponseDto(int roundNumber, long bestScore, int blockCount, Store store, List<GameRelic> relics) {
         this.status = "success";
         this.data = new Data(roundNumber, bestScore, blockCount, store.getMoney(), convertToGameRelicDtoList(relics));
     }
@@ -29,7 +29,7 @@ public class GetGameResultResponseDto {
         private int roundNumber;
 
         @JsonProperty("best_score")
-        private int bestScore;
+        private long bestScore;
 
         @JsonProperty("block_count")
         private int blockCount;

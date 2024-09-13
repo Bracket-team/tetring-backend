@@ -5,11 +5,8 @@ import com.bracket.tetring.domain.block.domain.StoreBlock;
 import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.block.repository.StoreBlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
-import com.bracket.tetring.domain.game.dto.response.GetStartRoundResponseDto;
-import com.bracket.tetring.domain.game.dto.response.UpdateEndRoundResponseDto;
+import com.bracket.tetring.domain.game.dto.response.*;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
-import com.bracket.tetring.domain.game.dto.response.GetCheckPlayingResponseDto;
-import com.bracket.tetring.domain.game.dto.response.GetPlayGameResponseDto;
 import com.bracket.tetring.domain.relic.repository.GameRelicRepository;
 import com.bracket.tetring.domain.game.repository.GameRepository;
 import com.bracket.tetring.domain.player.domain.Player;
@@ -126,6 +123,20 @@ public class GameService {
             int nextMoney = store.getMoney();
             return ResponseEntity.status(HttpStatus.OK).body(new UpdateEndRoundResponseDto(isWin, nextRoundNumber, nextRoundGoal, nextMoney));
         }
+    }
+
+    @Transactional
+    public ResponseEntity<?> getGameResult(Game game, Store store) {
+        if(!game.getIsPlaying()) {
+            throw new CustomValidationException(ALREADY_END_GAME);
+        }
+        game.setIsPlaying(false);
+
+        int roundNumber = game.getRoundNumber();
+        Long bestScore = game.getBestScore();
+        int count = blockRepository.findBlocksInGame(game).size();
+        List<GameRelic> relics = gameRelicRepository.findByGame(game);
+        return ResponseEntity.status(HttpStatus.OK).body(new GetGameResultResponseDto(roundNumber, bestScore, count, store, relics));
     }
 
     private List<Block> initialBlocks(Game game) {

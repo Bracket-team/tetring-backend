@@ -16,6 +16,7 @@ public enum ErrorCode {
     INVALID_GAME_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 게임 아이디입니다."),
     INVALID_BLOCK_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 블록 아이디입니다."),
 
+    ALREADY_END_GAME(HttpStatus.BAD_REQUEST, "이미 종료된 게임입니다."),
     ALREADY_IN_ROUND(HttpStatus.BAD_REQUEST, "플레이어가 이미 라운드를 시작했습니다."),
     ALREADY_IN_STORE(HttpStatus.BAD_REQUEST, "플레이어가 이미 상점에 있습니다."),
 

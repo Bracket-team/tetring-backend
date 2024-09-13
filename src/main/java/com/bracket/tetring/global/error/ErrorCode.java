@@ -24,7 +24,10 @@ public enum ErrorCode {
     GAME_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 게임을 찾을 수 없습니다."),
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 상점을 찾을 수 없습니다."),
     BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 블록을 찾을 수 없습니다."),
-    RELIC_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 유물을 찾을 수 없습니다.");
+    STORE_BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "상점 블록을 찾을 수 없습니다."),
+    RELIC_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 유물을 찾을 수 없습니다."),
+    STORE_RELIC_NOT_FOUND(HttpStatus.NOT_FOUND, "상점 유물을 찾을 수 없습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String message;

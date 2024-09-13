@@ -56,7 +56,8 @@ public class GameService {
     }
 
     @Transactional
-    public Game findPlayingGame(Player player) {
+    public Game findPlayingGame() {
+        Player player = playerService.findPlayer();
         return gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomException(GAME_NOT_FOUND));
     }
 

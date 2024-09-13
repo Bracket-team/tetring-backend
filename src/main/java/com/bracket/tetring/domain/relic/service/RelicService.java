@@ -62,7 +62,8 @@ public class RelicService {
     }
 
     @Transactional
-    public ResponseEntity<?> throwRelic(Game game, int slotNumber) {
+    public ResponseEntity<?> throwRelic(int slotNumber) {
+        Game game = gameService.findPlayingGame();
         GameRelic relic = gameRelicRepository.findByGameAndSlotNumber(game, slotNumber).orElseThrow(() -> new CustomException(ErrorCode.RELIC_NOT_FOUND));
         gameRelicRepository.delete(relic);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

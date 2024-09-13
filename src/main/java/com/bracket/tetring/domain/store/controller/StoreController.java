@@ -1,18 +1,25 @@
 package com.bracket.tetring.domain.store.controller;
 
+import com.bracket.tetring.domain.block.service.BlockService;
+import com.bracket.tetring.domain.relic.service.RelicService;
+import com.bracket.tetring.domain.store.dto.request.PurchaseStoreBlockRequestDto;
 import com.bracket.tetring.domain.store.service.StoreService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/stores")
 public class StoreController {
     private final StoreService storeService;
+    private final BlockService blockService;
+    private final RelicService relicService;
 
     @GetMapping("")
     public ResponseEntity<?> getStoreInfo() {
@@ -28,4 +35,21 @@ public class StoreController {
     public ResponseEntity<?> updateMoneyLevelUp() {
         return storeService.patchMoneyLevelUp();
     }
+
+    @PatchMapping("/blocks")
+    public ResponseEntity<?> purchaseBlock(@Valid @RequestBody PurchaseStoreBlockRequestDto requestDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            // 에러 메시지 추출
+            List<String> errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+
+            // 에러 응답을 생성하여 반환
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+        else {
+            return blockService.purchaseBlock(requestDto.getSlotNumber());
+        }
+    }
+
 }

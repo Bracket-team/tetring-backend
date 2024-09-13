@@ -10,6 +10,7 @@ import com.bracket.tetring.domain.game.service.GameService;
 import com.bracket.tetring.domain.relic.repository.GameRelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.dto.response.PurchaseStoreBlockResponseDto;
+import com.bracket.tetring.domain.store.service.StoreService;
 import com.bracket.tetring.global.handler.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import static com.bracket.tetring.global.error.ErrorCode.*;
 @RequiredArgsConstructor
 public class BlockService {
     private final GameService gameService;
+    private final StoreService storeService;
 
     private final BlockRepository blockRepository;
     private final StoreBlockRepository storeBlockRepository;
@@ -49,7 +51,10 @@ public class BlockService {
     }
 
     @Transactional
-    public ResponseEntity<?> purchaseBlock(Game game, int slotNumber, Store store) {
+    public ResponseEntity<?> purchaseBlock(int slotNumber) {
+        Game game = gameService.findPlayingGame();
+        Store store = storeService.findPlayingStore();
+
         //블록 구매하면, 상점에 있는 블록을 없애고, 유저 블록에 추가
         StoreBlock storeBlock = storeBlockRepository.findStoreBlockByGameAndSlotNumber(game, slotNumber).orElseThrow(() -> new CustomException(STORE_BLOCK_NOT_FOUND));
         int money = store.getMoney();

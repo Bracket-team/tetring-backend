@@ -3,6 +3,7 @@ package com.bracket.tetring.domain.store.controller;
 import com.bracket.tetring.domain.block.service.BlockService;
 import com.bracket.tetring.domain.relic.service.RelicService;
 import com.bracket.tetring.domain.store.dto.request.PurchaseStoreBlockRequestDto;
+import com.bracket.tetring.domain.store.dto.request.PurchaseStoreRelicRequestDto;
 import com.bracket.tetring.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,4 +53,19 @@ public class StoreController {
         }
     }
 
+    @PatchMapping("/relics")
+    public ResponseEntity<?> purchaseRelic(@Valid @RequestBody PurchaseStoreRelicRequestDto requestDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            // 에러 메시지 추출
+            List<String> errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+
+            // 에러 응답을 생성하여 반환
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+        else {
+            return relicService.purchaseStoreRelic(requestDto.getSlotNumber());
+        }
+    }
 }

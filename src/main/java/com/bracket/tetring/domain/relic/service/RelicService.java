@@ -15,6 +15,7 @@ import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.dto.response.GetRerollRelicResponseDto;
 import com.bracket.tetring.domain.store.dto.response.PurchaseStoreRelicResponseDto;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
+import com.bracket.tetring.domain.store.service.StoreService;
 import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.CustomException;
 import com.bracket.tetring.global.util.RelicSelector;
@@ -37,8 +38,8 @@ import static com.bracket.tetring.global.util.GameSettings.BLOCKS;
 @Service
 @RequiredArgsConstructor
 public class RelicService {
-    private final PlayerService playerService;
     private final GameService gameService;
+    private final StoreService storeService;
 
     private final GameRelicRepository gameRelicRepository;
     private final StoreRelicRepository storeRelicRepository;
@@ -70,7 +71,9 @@ public class RelicService {
     }
 
     @Transactional
-    public ResponseEntity<?> purchaseStoreRelic(Game game, int slotNumber, Store store) {
+    public ResponseEntity<?> purchaseStoreRelic(int slotNumber) {
+        Game game = gameService.findPlayingGame();
+        Store store = storeService.findPlayingStore();
         StoreRelic storeRelic = storeRelicRepository.findByStoreAndSlotNumber(store, slotNumber).orElseThrow(() -> new CustomException(STORE_RELIC_NOT_FOUND));
         int money = store.getMoney();
         if(money >= storeRelic.getPrice()) {

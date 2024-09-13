@@ -55,7 +55,8 @@ public class StoreService {
     }
 
     @Transactional
-    public ResponseEntity<?> patchMoneyLevelUp(Store store) {
+    public ResponseEntity<?> patchMoneyLevelUp() {
+        Store store = findPlayingStore();
         int money = store.getMoney();
         int moneyLevel = store.getMoneyLevel();
         int levelUpPrice = getMoneyLevelUpPrice(moneyLevel);

@@ -4,6 +4,7 @@ import com.bracket.tetring.domain.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +22,10 @@ public class StoreController {
     @GetMapping("/money")
     public ResponseEntity<?> getPlayerMoney() {
         return storeService.getGameMoney();
+    }
+
+    @PatchMapping("/level-up")
+    public ResponseEntity<?> updateMoneyLevelUp() {
+        return storeService.patchMoneyLevelUp();
     }
 }

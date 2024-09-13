@@ -175,7 +175,9 @@ public class GameService {
     }
 
     @Transactional
-    public ResponseEntity<?> getGameResult(Game game, Store store) {
+    public ResponseEntity<?> getGameResult() {
+        Game game = findPlayingGame();
+        Store store = storeService.findPlayingStore();
         if(!game.getIsPlaying()) {
             throw new CustomException(ALREADY_END_GAME);
         }

@@ -47,4 +47,9 @@ public class GameController {
             return gameService.getGameDetailsForEndRound(requestDto.getScore());
         }
     }
+
+    @GetMapping("/result")
+    public ResponseEntity<?> getGameResult() {
+        return gameService.getGameResult();
+    }
 }

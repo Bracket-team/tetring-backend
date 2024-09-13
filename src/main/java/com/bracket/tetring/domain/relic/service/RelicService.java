@@ -1,5 +1,7 @@
 package com.bracket.tetring.domain.relic.service;
 
+import com.bracket.tetring.domain.block.domain.Block;
+import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.dto.response.GetGameRelicsResponseDto;
@@ -21,11 +23,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static com.bracket.tetring.global.error.ErrorCode.ARE_SLOTS_FULL;
 import static com.bracket.tetring.global.error.ErrorCode.STORE_RELIC_NOT_FOUND;
+import static com.bracket.tetring.global.util.GameSettings.BLOCKS;
 import static com.bracket.tetring.global.util.GameSettings.REROLL_UPDATE_PRICE;
 
 @Service
@@ -33,6 +38,7 @@ import static com.bracket.tetring.global.util.GameSettings.REROLL_UPDATE_PRICE;
 public class RelicService {
     private final GameRelicRepository gameRelicRepository;
     private final StoreRelicRepository storeRelicRepository;
+    private final BlockRepository blockRepository;
 
     private final RelicSelector relicSelector;
     private final RerollPriceCalculator rerollPriceCalculator;
@@ -77,13 +83,24 @@ public class RelicService {
             if(relic.getRelic().getRelicNumber() == 10) { //쿠폰 블록
                 store.setUseCoupon(false);
             }
+            List<Block> blocks = new ArrayList<>();
+            if(relic.getRelic().getRelicNumber() == 5) { // 재활용 블록
+                Random random = new Random();
+                for(int i = 0; i < 3; i++) {
+                    int randomIndex = random.nextInt(BLOCKS.length);
+                    Block block = new Block(BLOCKS[randomIndex].color(), BLOCKS[randomIndex].shape(), game);
+                    blockRepository.save(block);
+                    blocks.add(block);
+                }
+            }
 
-            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, relic));
+            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, relic, blocks));
         }
         else {
             // 살 수 없는 경우
             boolean canBuy = false;
-            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, null));
+            List<Block> blocks = new ArrayList<>();
+            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, null, blocks));
         }
     }
 

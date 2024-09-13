@@ -3,7 +3,6 @@ package com.bracket.tetring.domain.block.service;
 import com.bracket.tetring.domain.block.domain.Block;
 import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
-import com.bracket.tetring.domain.game.repository.GameRepository;
 import com.bracket.tetring.global.handler.CustomValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.bracket.tetring.global.error.ErrorCode.*;
+import static com.bracket.tetring.global.error.ErrorCode.BLOCK_NOT_FOUND;
+import static com.bracket.tetring.global.error.ErrorCode.INVALID_BLOCK_ID;
 
 @Service
 @RequiredArgsConstructor

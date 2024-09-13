@@ -37,7 +37,6 @@ import static com.bracket.tetring.global.util.GameSettings.*;
 @Service
 @RequiredArgsConstructor
 public class GameService {
-    private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
     private final BlockRepository blockRepository;
     private final GameRelicRepository gameRelicRepository;

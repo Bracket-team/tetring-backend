@@ -57,12 +57,17 @@ public class GameService {
     }
 
     @Transactional
+    public Game findPlayingGame(Player player) {
+        return gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomValidationException(GAME_NOT_FOUND));
+    }
+
+    @Transactional
     public ResponseEntity<?> playGame() {
         Player player = playerService.findPlayer();
         /*게임, 스코어 점수, 게임 블록, 게임 유물, 상점, 머니 가격, 상점 블록, 상점 유물*/
         if(gameRepository.existsByPlayerAndIsPlayingTrue(player)) {
             /*플레이할 게임이 존재할 경우 -> 기존에 게임에 대한 데이터 수집*/
-            Game game = gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomValidationException(GAME_NOT_FOUND));
+            Game game = findPlayingGame(player);
             int roundGoal = getRoundGoal(game.getRoundNumber());
             List<Block> gameBlocks = blockRepository.findBlocksInGame(game);
             List<GameRelic> gameRelics = gameRelicRepository.findByGame(game);

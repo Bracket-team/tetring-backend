@@ -6,6 +6,9 @@ import com.bracket.tetring.domain.block.dto.response.GetGameBlocksResponseDto;
 import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.block.repository.StoreBlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
+import com.bracket.tetring.domain.game.service.GameService;
+import com.bracket.tetring.domain.player.domain.Player;
+import com.bracket.tetring.domain.player.service.PlayerService;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.repository.GameRelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;
@@ -24,12 +27,17 @@ import static com.bracket.tetring.global.error.ErrorCode.*;
 @Service
 @RequiredArgsConstructor
 public class BlockService {
+    private final PlayerService playerService;
+    private final GameService gameService;
+
     private final BlockRepository blockRepository;
     private final StoreBlockRepository storeBlockRepository;
     private final GameRelicRepository gameRelicRepository;
 
     @Transactional
-    public ResponseEntity<?> getGameBlocks(Game game) {
+    public ResponseEntity<?> getGameBlocks() {
+        Player player = playerService.findPlayer();
+        Game game = gameService.findPlayingGame(player);
         List<Block> gameBlocks = blockRepository.findBlocksInGame(game);
         return ResponseEntity.status(HttpStatus.OK).body(new GetGameBlocksResponseDto(gameBlocks));
     }

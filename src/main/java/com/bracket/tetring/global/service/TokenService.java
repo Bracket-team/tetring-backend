@@ -1,15 +1,11 @@
 package com.bracket.tetring.global.service;
 
-import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.TokenException;
 import com.bracket.tetring.global.redis.entity.Token;
 import com.bracket.tetring.global.redis.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
 
 import static com.bracket.tetring.global.error.ErrorCode.TOKEN_EXPIRED;
 

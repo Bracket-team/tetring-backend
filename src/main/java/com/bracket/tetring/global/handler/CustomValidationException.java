@@ -1,10 +1,7 @@
 package com.bracket.tetring.global.handler;
 
 import com.bracket.tetring.global.error.ErrorCode;
-import lombok.*;
-
-import java.io.Serial;
-import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class CustomValidationException extends RuntimeException {

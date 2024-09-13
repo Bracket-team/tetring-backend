@@ -1,9 +1,7 @@
 package com.bracket.tetring.global.oauth2.handler;
 
 import com.bracket.tetring.domain.player.domain.Player;
-import com.bracket.tetring.domain.player.domain.Role;
 import com.bracket.tetring.domain.player.repository.PlayerRepository;
-import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.CustomValidationException;
 import com.bracket.tetring.global.jwt.TokenProvider;
 import com.bracket.tetring.global.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 
 import static com.bracket.tetring.global.error.ErrorCode.MEMBER_NOT_FOUND;

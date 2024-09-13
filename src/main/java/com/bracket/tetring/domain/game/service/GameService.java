@@ -5,6 +5,7 @@ import com.bracket.tetring.domain.block.domain.StoreBlock;
 import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.block.repository.StoreBlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
+import com.bracket.tetring.domain.game.dto.response.GetStartRoundResponseDto;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.game.dto.response.GetCheckPlayingResponseDto;
 import com.bracket.tetring.domain.game.dto.response.GetPlayGameResponseDto;
@@ -57,7 +58,7 @@ public class GameService {
             /*플레이할 게임이 존재할 경우 -> 기존에 게임에 대한 데이터 수집*/
             Game game = gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomValidationException(GAME_NOT_FOUND));
             int roundGoal = GameSettings.getRoundGoal(game.getRoundNumber());
-            List<Block> gameBlocks = blockRepository.findByGame(game);
+            List<Block> gameBlocks = blockRepository.findBlocksInGame(game);
             List<GameRelic> gameRelics = gameRelicRepository.findByGame(game);
             Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomValidationException(STORE_NOT_FOUND));
             int moneyLevelUpPrice = GameSettings.getMoneyLevelUpPrice(store.getMoneyLevel());
@@ -77,6 +78,14 @@ public class GameService {
         List<StoreBlock> storeBlocks = initialStoreBlocks(game);
         List<StoreRelic> storeRelics = relicSelector.getRandomRelics(store, gameRelics);
         return ResponseEntity.status(HttpStatus.OK).body(new GetPlayGameResponseDto(game, roundGoal, gameBlocks, gameRelics, store, moneyLevelUpPrice, storeBlocks, storeRelics));
+    }
+
+    @Transactional
+    public ResponseEntity<?> getGameDetailsForNewRound(Game game) {
+        int roundGoal = GameSettings.getRoundGoal(game.getRoundNumber());
+        List<Block> blocks = blockRepository.findBlocksInGame(game);
+        List<GameRelic> relics = gameRelicRepository.findByGame(game);
+        return ResponseEntity.status(HttpStatus.OK).body(new GetStartRoundResponseDto(game, roundGoal, blocks, relics));
     }
 
     private List<Block> initialBlocks(Game game) {

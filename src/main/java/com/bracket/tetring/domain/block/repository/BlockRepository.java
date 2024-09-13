@@ -11,5 +11,5 @@ import java.util.List;
 public interface BlockRepository extends JpaRepository<Block, Long> {
 
     @Query("SELECT b FROM Block b WHERE b.game = :game AND TYPE(b) <> StoreBlock")
-    List<Block> findBlocksNotInStore(@Param("game") Game game);
+    List<Block> findBlocksInGame(@Param("game") Game game);
 }

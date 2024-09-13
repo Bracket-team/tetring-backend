@@ -23,7 +23,7 @@ public class BlockService {
 
     @Transactional
     public ResponseEntity<?> getGameBlocks(Game game) {
-        List<Block> gameBlocks = blockRepository.findByGame(game);
+        List<Block> gameBlocks = blockRepository.findBlocksInGame(game);
         return ResponseEntity.status(HttpStatus.OK).body(new GetGameBlocksResponseDto(gameBlocks));
     }
 

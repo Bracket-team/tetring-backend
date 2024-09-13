@@ -16,4 +16,7 @@ public interface GameRelicRepository extends JpaRepository<GameRelic, GameRelicI
 
     @Query("SELECT gr FROM GameRelic gr WHERE gr.game = :game AND gr.relic.relicNumber = :relicNumber")
     Optional<GameRelic> findByGameAndRelicNumber(@Param("game") Game game, @Param("relicNumber") Integer relicNumber);
+
+    @Query("SELECT gr FROM GameRelic gr WHERE gr.game = :game AND gr.slotNumber = :slotNumber")
+    Optional<GameRelic> findByGameAndSlotNumber(@Param("game") Game game, @Param("slotNumber") Integer slotNumber);
 }

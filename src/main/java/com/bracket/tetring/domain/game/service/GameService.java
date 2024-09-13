@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static com.bracket.tetring.global.error.ErrorCode.*;
 import static com.bracket.tetring.global.util.GameSettings.*;
@@ -44,6 +45,7 @@ public class GameService {
 
     private final RelicSelector relicSelector;
     private final RerollPriceCalculator rerollPriceCalculator;
+    private final Random random = new Random();
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> checkPlayingGame(Player player) {
@@ -126,6 +128,21 @@ public class GameService {
             boolean investmentBlock = gameRelicRepository.findByGameAndRelicNumber(game, 20).isPresent();//투자 블록
             if(investmentBlock) {
                 nextMoney += Math.max(10, (int)(nextMoney / 4));
+            }
+            GameRelic destructionBlock = gameRelicRepository.findByGameAndRelicNumber(game, 28).orElse(null); // 파괴 블록
+            if(destructionBlock != null) {
+                destructionBlock.setRate(destructionBlock.getRate() + 2);
+                List<GameRelic> gameRelics = gameRelicRepository.findByGame(game);
+                List<GameRelic> relicsToChooseFrom = gameRelics.stream()
+                        .filter(relic -> relic.getRelic().getRelicNumber() != 28) // relicNumber가 28이 아닌 것만 필터링
+                        .toList();
+                // 28번을 제외한 다른 유물이 있을 경우
+                if (!relicsToChooseFrom.isEmpty()) {
+                    // 랜덤으로 유물 하나 선택
+                    GameRelic relicToDelete = relicsToChooseFrom.get(random.nextInt(relicsToChooseFrom.size()));
+                    // 유물을 삭제
+                    gameRelicRepository.delete(relicToDelete);
+                }
             }
 
             store.setMoney(nextMoney);

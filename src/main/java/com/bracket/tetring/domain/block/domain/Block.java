@@ -7,11 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name="block")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED) // Joined 전략을 사용하여 상속 구조
 public class Block {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +26,10 @@ public class Block {
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
+
+    public Block(String color, String shape, Game game) {
+        this.color = color;
+        this.shape = shape;
+        this.game = game;
+    }
 }

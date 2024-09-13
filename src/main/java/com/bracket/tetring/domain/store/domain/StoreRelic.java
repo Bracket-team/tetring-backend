@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name="store_relic")
 @IdClass(StoreRelicId.class)
 @Getter
 @Setter

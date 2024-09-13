@@ -11,9 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Store {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeId;
 
     @OneToOne
@@ -28,4 +28,11 @@ public class Store {
 
     @Column(nullable = false)
     private Integer moneyLevel;
+
+    public Store(Game game, Integer rerollPrice, Integer money, Integer moneyLevel) {
+        this.game = game;
+        this.rerollPrice = rerollPrice;
+        this.money = money;
+        this.moneyLevel = moneyLevel;
+    }
 }

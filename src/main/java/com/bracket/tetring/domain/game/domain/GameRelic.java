@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name="game_relic")
 @IdClass(GameRelicId.class)
 @Getter
 @Setter
@@ -21,7 +21,7 @@ public class GameRelic {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
+    @JoinColumn(name = "relic_id", nullable = false)
     private Relic relic;
 
     private Double rate;

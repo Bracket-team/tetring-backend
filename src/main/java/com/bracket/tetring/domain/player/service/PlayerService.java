@@ -6,6 +6,8 @@ import com.bracket.tetring.domain.player.repository.PlayerFoundRelicsRepository;
 import com.bracket.tetring.domain.player.repository.PlayerRepository;
 import com.bracket.tetring.global.handler.CustomValidationException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +20,8 @@ public class PlayerService {
     private final PlayerFoundRelicsRepository playerFoundRelicsRepository;
 
     @Transactional(readOnly = true)
-    public GetPlayerFoundRelicsResponseDto findAllFoundRelics(Long playerId) {
+    public ResponseEntity<?> findAllFoundRelics(Long playerId) {
         Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(Collections.singletonList("플레이어를 찾을 수 없습니다.")));
-        return new GetPlayerFoundRelicsResponseDto(playerFoundRelicsRepository.findRelicsByPlayer(player));
+        return ResponseEntity.status(HttpStatus.OK).body(new GetPlayerFoundRelicsResponseDto(playerFoundRelicsRepository.findRelicsByPlayer(player)));
     }
 }

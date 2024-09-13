@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +34,13 @@ public class Game {
 
     @Column(nullable = false)
     private Boolean isPlaying;
+
+    public Game(Integer roundNumber, Boolean isStore, Player player, LocalDateTime playDate, Long bestScore, Boolean isPlaying) {
+        this.roundNumber = roundNumber;
+        this.isStore = isStore;
+        this.player = player;
+        this.playDate = playDate;
+        this.bestScore = bestScore;
+        this.isPlaying = isPlaying;
+    }
 }

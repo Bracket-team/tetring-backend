@@ -23,9 +23,9 @@ public class GetStoreBlockDto {
     private int slotNumber;
 
     public GetStoreBlockDto(StoreBlock block) {
-        this.blockId = block.getStoreBlockId();
-        this.color = block.getBlock().getColor();
-        this.shape = block.getBlock().getShape();
+        this.blockId = block.getBlockId();
+        this.color = block.getColor();
+        this.shape = block.getShape();
         this.slotNumber = block.getSlotNumber();
     }
 

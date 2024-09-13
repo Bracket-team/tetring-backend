@@ -1,5 +1,6 @@
 package com.bracket.tetring.global.jwt;
 
+import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.TokenException;
 import com.bracket.tetring.global.redis.entity.Token;
 import com.bracket.tetring.global.service.TokenService;
@@ -23,6 +24,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.bracket.tetring.global.error.ErrorCode.INVALID_JWT_SIGNATURE;
+import static com.bracket.tetring.global.error.ErrorCode.INVALID_TOKEN;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -105,16 +109,16 @@ public class TokenProvider {
         return claims.getExpiration().after(new Date());
     }
 
-    private Claims parseClaims(String token) {
+    private Claims parseClaims(String token) throws TokenException {
         try {
             return Jwts.parserBuilder().setSigningKey(secretKey).build()
                     .parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         } catch (MalformedJwtException e) {
-            throw new TokenException(HttpStatus.BAD_REQUEST, "유효하지 않는 토큰입니다.");
+            throw new TokenException(INVALID_TOKEN);
         } catch (SecurityException e) {
-            throw new TokenException(HttpStatus.BAD_REQUEST, "유효하지 않는 서명입니다.");
+            throw new TokenException(INVALID_JWT_SIGNATURE);
         }
     }
 }

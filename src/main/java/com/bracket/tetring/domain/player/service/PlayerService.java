@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import static com.bracket.tetring.global.error.ErrorCode.PLAYER_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class PlayerService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> findAllFoundRelics(Long playerId) {
-        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(Collections.singletonList("플레이어를 찾을 수 없습니다.")));
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(PLAYER_NOT_FOUND));
         return ResponseEntity.status(HttpStatus.OK).body(new GetPlayerFoundRelicsResponseDto(playerFoundRelicsRepository.findRelicsByPlayer(player)));
     }
 }

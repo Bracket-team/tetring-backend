@@ -1,5 +1,6 @@
 package com.bracket.tetring.global.service;
 
+import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.TokenException;
 import com.bracket.tetring.global.redis.entity.Token;
 import com.bracket.tetring.global.redis.repository.TokenRepository;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+
+import static com.bracket.tetring.global.error.ErrorCode.TOKEN_EXPIRED;
 
 @RequiredArgsConstructor
 @Service
@@ -32,7 +35,7 @@ public class TokenService {
 
     public Token findByAccessTokenOrThrow(String accessToken) {
         return tokenRepository.findByAccessToken(accessToken)
-                .orElseThrow(() -> new TokenException(HttpStatus.BAD_REQUEST, "토큰이 만료되었습니다."));
+                .orElseThrow(() -> new TokenException(TOKEN_EXPIRED));
     }
 
     @Transactional

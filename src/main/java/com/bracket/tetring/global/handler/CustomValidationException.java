@@ -1,16 +1,25 @@
 package com.bracket.tetring.global.handler;
 
+import com.bracket.tetring.global.error.ErrorCode;
 import lombok.*;
 
 import java.io.Serial;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class CustomValidationException extends RuntimeException {
-    @Serial
-    private static final long serialVersionUID = 1L;
+    private final ErrorCode errorCode;
+    private final String message;
 
-    private List<String> errors;
+    public CustomValidationException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+        this.message = errorCode.getMessage();
+    }
+
+    public CustomValidationException(ErrorCode errorCode, String message) {
+        super(message);
+        this.errorCode = errorCode;
+        this.message = message;
+    }
 }

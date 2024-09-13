@@ -11,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
+
+import static com.bracket.tetring.global.error.ErrorCode.INVALID_GAME_ID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class BlockService {
 
     @Transactional
     public ResponseEntity<?> getGameBlocks(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(() -> new CustomValidationException(Collections.singletonList("유효하지 않은 게임아이디입니다.")));
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new CustomValidationException(INVALID_GAME_ID));
         List<Block> gameBlocks = blockRepository.findByGame(game);
         return ResponseEntity.status(HttpStatus.OK).body(gameBlocks);
     }

@@ -16,6 +16,7 @@ import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import com.bracket.tetring.domain.store.repository.StoreRepository;
+import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.CustomValidationException;
 import com.bracket.tetring.global.util.GameSettings;
 import com.bracket.tetring.global.util.RelicSelector;
@@ -32,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static com.bracket.tetring.global.error.ErrorCode.*;
 import static com.bracket.tetring.global.util.GameSettings.*;
 
 @Service
@@ -49,21 +51,21 @@ public class GameService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> checkPlayingGame(Long playerId) {
-        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(Collections.singletonList("플레이어를 찾을 수 없습니다.")));
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(PLAYER_NOT_FOUND));
         return ResponseEntity.status(HttpStatus.OK).body(new GetCheckPlayingResponseDto(gameRepository.existsByPlayerAndIsPlayingTrue(player)));
     }
 
     @Transactional
     public ResponseEntity<?> playGame(Long playerId) {
-        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(Collections.singletonList("플레이어를 찾을 수 없습니다.")));
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(PLAYER_NOT_FOUND));
         /*게임, 스코어 점수, 게임 블록, 게임 유물, 상점, 머니 가격, 상점 블록, 상점 유물*/
         if(gameRepository.existsByPlayerAndIsPlayingTrue(player)) {
             /*플레이할 게임이 존재할 경우 -> 기존에 게임에 대한 데이터 수집*/
-            Game game = gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomValidationException(Collections.singletonList("게임을 찾지 못했습니다.")));
+            Game game = gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomValidationException(GAME_NOT_FOUND));
             int roundGoal = GameSettings.getRoundGoal(game.getRoundNumber());
             List<Block> gameBlocks = blockRepository.findByGame(game);
             List<GameRelic> gameRelics = gameRelicRepository.findByGame(game);
-            Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomValidationException(Collections.singletonList("상점을 찾을 수 없습니다.")));
+            Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomValidationException(STORE_NOT_FOUND));
             int moneyLevelUpPrice = GameSettings.getMoneyLevelUpPrice(store.getMoneyLevel());
             List<StoreBlock> storeBlocks = storeBlockRepository.findStoreBlocksByGame(game);
             List<StoreRelic> storeRelics = storeRelicRepository.findByStore(store);

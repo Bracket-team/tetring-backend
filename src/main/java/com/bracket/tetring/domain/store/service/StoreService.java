@@ -49,7 +49,8 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getGameMoney(Store store) {
+    public ResponseEntity<?> getGameMoney() {
+        Store store = findPlayingStore();
         return ResponseEntity.status(HttpStatus.OK).body(new GetMoneyResponseDto(store));
     }
 

@@ -18,4 +18,8 @@ public class StoreController {
         return storeService.getStoreDetails();
     }
 
+    @GetMapping("/money")
+    public ResponseEntity<?> getPlayerMoney() {
+        return storeService.getGameMoney();
+    }
 }

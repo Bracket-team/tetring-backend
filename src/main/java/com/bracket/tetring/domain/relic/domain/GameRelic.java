@@ -7,8 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="game_relic")
+@Entity
 @IdClass(GameRelicId.class)
+@Table(name = "game_relic")
 @Getter
 @Setter
 @NoArgsConstructor

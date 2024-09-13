@@ -93,6 +93,10 @@ public class RelicService {
                     blocks.add(block);
                 }
             }
+            if(relic.getRelic().getRelicNumber() == 18) { //수표 블록
+                money *= 2;
+                store.setMoney(money);
+            }
 
             return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, relic, blocks));
         }

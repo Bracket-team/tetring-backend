@@ -118,10 +118,16 @@ public class GameService {
             game.setRoundNumber(nextRoundNumber);
             int nextRoundGoal = getRoundGoal(nextRoundNumber);
             int nextMoney = store.getMoney() + getMoney(store.getMoneyLevel());
+
             boolean overworkBlock = gameRelicRepository.findByGameAndRelicNumber(game, 7).isPresent();//초과 근무 블록
             if(overworkBlock) {
                 nextMoney += (int) ((score - roundGoal) / 1000);
             }
+            boolean investmentBlock = gameRelicRepository.findByGameAndRelicNumber(game, 20).isPresent();//투자 블록
+            if(investmentBlock) {
+                nextMoney += Math.max(10, (int)(nextMoney / 4));
+            }
+
             store.setMoney(nextMoney);
             return ResponseEntity.status(HttpStatus.OK).body(new UpdateEndRoundResponseDto(isWin, nextRoundNumber, nextRoundGoal, nextMoney));
         }

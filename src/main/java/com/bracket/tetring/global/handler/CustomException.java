@@ -4,17 +4,17 @@ import com.bracket.tetring.global.error.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class CustomValidationException extends RuntimeException {
+public class CustomException extends RuntimeException {
     private final ErrorCode errorCode;
     private final String message;
 
-    public CustomValidationException(ErrorCode errorCode) {
+    public CustomException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
         this.message = errorCode.getMessage();
     }
 
-    public CustomValidationException(ErrorCode errorCode, String message) {
+    public CustomException(ErrorCode errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
         this.message = message;

@@ -15,7 +15,7 @@ import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import com.bracket.tetring.domain.store.repository.StoreRepository;
-import com.bracket.tetring.global.handler.CustomValidationException;
+import com.bracket.tetring.global.handler.CustomException;
 import com.bracket.tetring.global.util.GameSettings;
 import com.bracket.tetring.global.util.RelicSelector;
 import com.bracket.tetring.global.util.RerollPriceCalculator;
@@ -29,7 +29,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static com.bracket.tetring.global.error.ErrorCode.*;
 import static com.bracket.tetring.global.util.GameSettings.*;
@@ -58,7 +57,7 @@ public class GameService {
 
     @Transactional
     public Game findPlayingGame(Player player) {
-        return gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomValidationException(GAME_NOT_FOUND));
+        return gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomException(GAME_NOT_FOUND));
     }
 
     @Transactional
@@ -71,7 +70,7 @@ public class GameService {
             int roundGoal = getRoundGoal(game.getRoundNumber());
             List<Block> gameBlocks = blockRepository.findBlocksInGame(game);
             List<GameRelic> gameRelics = gameRelicRepository.findByGame(game);
-            Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomValidationException(STORE_NOT_FOUND));
+            Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
             int moneyLevelUpPrice = GameSettings.getMoneyLevelUpPrice(store.getMoneyLevel());
             List<StoreBlock> storeBlocks = storeBlockRepository.findStoreBlocksByGame(game);
             List<StoreRelic> storeRelics = storeRelicRepository.findByStore(store);
@@ -94,7 +93,7 @@ public class GameService {
     @Transactional
     public ResponseEntity<?> getGameDetailsForNewRound(Game game) {
         if(!game.getIsStore()) {
-            throw new CustomValidationException(ALREADY_IN_ROUND);
+            throw new CustomException(ALREADY_IN_ROUND);
         }
         game.setIsStore(false);
 
@@ -107,7 +106,7 @@ public class GameService {
     @Transactional
     public ResponseEntity<?> getGameDetailsForEndRound(Game game, Store store, Long score) {
         if(game.getIsStore()) {
-            throw new CustomValidationException(ALREADY_IN_STORE);
+            throw new CustomException(ALREADY_IN_STORE);
         }
         game.setIsStore(true);
 
@@ -171,7 +170,7 @@ public class GameService {
     @Transactional
     public ResponseEntity<?> getGameResult(Game game, Store store) {
         if(!game.getIsPlaying()) {
-            throw new CustomValidationException(ALREADY_END_GAME);
+            throw new CustomException(ALREADY_END_GAME);
         }
         game.setIsPlaying(false);
 

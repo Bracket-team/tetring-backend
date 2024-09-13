@@ -2,7 +2,7 @@ package com.bracket.tetring.global.oauth2.handler;
 
 import com.bracket.tetring.domain.player.domain.Player;
 import com.bracket.tetring.domain.player.repository.PlayerRepository;
-import com.bracket.tetring.global.handler.CustomValidationException;
+import com.bracket.tetring.global.handler.CustomException;
 import com.bracket.tetring.global.jwt.TokenProvider;
 import com.bracket.tetring.global.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.bracket.tetring.global.oauth2.service.OAuth2UserPrincipal;
@@ -90,7 +90,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             String accessToken = principal.userInfo().getAccessToken();
             OAuth2Provider provider = principal.userInfo().getProvider();
 
-            Player player = playerRepository.findPlayerByEmail(principal.userInfo().getEmail()).orElseThrow(() -> new CustomValidationException(MEMBER_NOT_FOUND));
+            Player player = playerRepository.findPlayerByEmail(principal.userInfo().getEmail()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
             tokenService.deleteRefreshToken(player.getUsername());
             oAuth2UserUnlinkManager.unlink(provider, accessToken);

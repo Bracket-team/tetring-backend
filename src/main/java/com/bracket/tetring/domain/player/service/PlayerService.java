@@ -4,7 +4,7 @@ import com.bracket.tetring.domain.player.domain.Player;
 import com.bracket.tetring.domain.player.dto.response.GetPlayerFoundRelicsResponseDto;
 import com.bracket.tetring.domain.player.repository.PlayerFoundRelicsRepository;
 import com.bracket.tetring.domain.player.repository.PlayerRepository;
-import com.bracket.tetring.global.handler.CustomValidationException;
+import com.bracket.tetring.global.handler.CustomException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static com.bracket.tetring.global.error.ErrorCode.PLAYER_NOT_FOUND;
 
@@ -47,7 +45,7 @@ public class PlayerService {
                 email = (String) principal;
             }
 
-            player = playerRepository.findPlayerByEmail(email).orElse(null);
+            player = playerRepository.findPlayerByEmail(email).orElseThrow(() -> new CustomException(PLAYER_NOT_FOUND));
         }
         return player;
     }

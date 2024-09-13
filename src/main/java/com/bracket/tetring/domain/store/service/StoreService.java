@@ -10,8 +10,7 @@ import com.bracket.tetring.domain.store.dto.response.GetStoreInfoResponseDto;
 import com.bracket.tetring.domain.store.dto.response.UpdateMoneyLevelUpResponseDto;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import com.bracket.tetring.domain.store.repository.StoreRepository;
-import com.bracket.tetring.global.handler.CustomValidationException;
-import com.bracket.tetring.global.util.GameSettings;
+import com.bracket.tetring.global.handler.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class StoreService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getStoreDetails(Game game) {
-        Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomValidationException(STORE_NOT_FOUND));
+        Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
         int moneyLevelUpPrice = getMoneyLevelUpPrice(store.getMoneyLevel());
         List<StoreBlock> blocks = storeBlockRepository.findStoreBlocksByGame(game);
         List<StoreRelic> relics = storeRelicRepository.findByStore(store);

@@ -9,11 +9,10 @@ import com.bracket.tetring.domain.game.domain.Game;
 import com.bracket.tetring.domain.game.service.GameService;
 import com.bracket.tetring.domain.player.domain.Player;
 import com.bracket.tetring.domain.player.service.PlayerService;
-import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.repository.GameRelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.dto.response.PurchaseStoreBlockResponseDto;
-import com.bracket.tetring.global.handler.CustomValidationException;
+import com.bracket.tetring.global.handler.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +42,12 @@ public class BlockService {
     }
 
     @Transactional
-    public ResponseEntity<?> changeBlockShape(Game game, Long blockId, String shape) {
-        Block block = blockRepository.findById(blockId).orElseThrow(() -> new CustomValidationException(BLOCK_NOT_FOUND));
+    public ResponseEntity<?> changeBlockShape(Long blockId, String shape) {
+        Player player = playerService.findPlayer();
+        Game game = gameService.findPlayingGame(player);
+        Block block = blockRepository.findById(blockId).orElseThrow(() -> new CustomException(BLOCK_NOT_FOUND));
         if(block.getGame() != game)
-            throw new CustomValidationException(INVALID_BLOCK_ID);
+            throw new CustomException(INVALID_BLOCK_ID);
 
         block.setShape(shape);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -55,7 +56,7 @@ public class BlockService {
     @Transactional
     public ResponseEntity<?> purchaseBlock(Game game, int slotNumber, Store store) {
         //블록 구매하면, 상점에 있는 블록을 없애고, 유저 블록에 추가
-        StoreBlock storeBlock = storeBlockRepository.findStoreBlockByGameAndSlotNumber(game, slotNumber).orElseThrow(() -> new CustomValidationException(STORE_BLOCK_NOT_FOUND));
+        StoreBlock storeBlock = storeBlockRepository.findStoreBlockByGameAndSlotNumber(game, slotNumber).orElseThrow(() -> new CustomException(STORE_BLOCK_NOT_FOUND));
         int money = store.getMoney();
         if(money >= storeBlock.getPrice()) {
             //블록을 살 수 있는 경우 -> 돈 줄이고, 상점 블록 없애고, 게임 블록 추가

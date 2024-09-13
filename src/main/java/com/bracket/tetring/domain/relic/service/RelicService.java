@@ -13,8 +13,7 @@ import com.bracket.tetring.domain.store.dto.response.GetRerollRelicResponseDto;
 import com.bracket.tetring.domain.store.dto.response.PurchaseStoreRelicResponseDto;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import com.bracket.tetring.global.error.ErrorCode;
-import com.bracket.tetring.global.handler.CustomValidationException;
-import com.bracket.tetring.global.util.GameSettings;
+import com.bracket.tetring.global.handler.CustomException;
 import com.bracket.tetring.global.util.RelicSelector;
 import com.bracket.tetring.global.util.RerollPriceCalculator;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ import java.util.Random;
 import static com.bracket.tetring.global.error.ErrorCode.ARE_SLOTS_FULL;
 import static com.bracket.tetring.global.error.ErrorCode.STORE_RELIC_NOT_FOUND;
 import static com.bracket.tetring.global.util.GameSettings.BLOCKS;
-import static com.bracket.tetring.global.util.GameSettings.REROLL_UPDATE_PRICE;
 
 @Service
 @RequiredArgsConstructor
@@ -57,14 +55,14 @@ public class RelicService {
 
     @Transactional
     public ResponseEntity<?> throwRelic(Game game, int slotNumber) {
-        GameRelic relic = gameRelicRepository.findByGameAndSlotNumber(game, slotNumber).orElseThrow(() -> new CustomValidationException(ErrorCode.RELIC_NOT_FOUND));
+        GameRelic relic = gameRelicRepository.findByGameAndSlotNumber(game, slotNumber).orElseThrow(() -> new CustomException(ErrorCode.RELIC_NOT_FOUND));
         gameRelicRepository.delete(relic);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Transactional
     public ResponseEntity<?> purchaseStoreRelic(Game game, int slotNumber, Store store) {
-        StoreRelic storeRelic = storeRelicRepository.findByStoreAndSlotNumber(store, slotNumber).orElseThrow(() -> new CustomValidationException(STORE_RELIC_NOT_FOUND));
+        StoreRelic storeRelic = storeRelicRepository.findByStoreAndSlotNumber(store, slotNumber).orElseThrow(() -> new CustomException(STORE_RELIC_NOT_FOUND));
         int money = store.getMoney();
         if(money >= storeRelic.getPrice()) {
             // 살 수 있는 경우
@@ -73,7 +71,7 @@ public class RelicService {
             money -= storeRelic.getPrice();
             store.setMoney(money);
 
-            Integer number = findLowestUnusedSlotNumber(game).orElseThrow(() -> new CustomValidationException(ARE_SLOTS_FULL));
+            Integer number = findLowestUnusedSlotNumber(game).orElseThrow(() -> new CustomException(ARE_SLOTS_FULL));
 
             GameRelic relic = new GameRelic(game, storeRelic.getRelic(), storeRelic.getRelic().getRate(), number);
             gameRelicRepository.save(relic);

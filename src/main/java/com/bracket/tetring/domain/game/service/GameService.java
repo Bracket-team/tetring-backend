@@ -57,7 +57,8 @@ public class GameService {
     }
 
     @Transactional
-    public ResponseEntity<?> playGame(Player player) {
+    public ResponseEntity<?> playGame() {
+        Player player = playerService.findPlayer();
         /*게임, 스코어 점수, 게임 블록, 게임 유물, 상점, 머니 가격, 상점 블록, 상점 유물*/
         if(gameRepository.existsByPlayerAndIsPlayingTrue(player)) {
             /*플레이할 게임이 존재할 경우 -> 기존에 게임에 대한 데이터 수집*/

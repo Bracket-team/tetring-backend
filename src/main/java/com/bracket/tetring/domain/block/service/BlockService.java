@@ -6,6 +6,8 @@ import com.bracket.tetring.domain.block.dto.response.GetGameBlocksResponseDto;
 import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.block.repository.StoreBlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
+import com.bracket.tetring.domain.relic.domain.GameRelic;
+import com.bracket.tetring.domain.relic.repository.GameRelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.dto.response.PurchaseStoreBlockResponseDto;
 import com.bracket.tetring.global.handler.CustomValidationException;
@@ -24,6 +26,7 @@ import static com.bracket.tetring.global.error.ErrorCode.*;
 public class BlockService {
     private final BlockRepository blockRepository;
     private final StoreBlockRepository storeBlockRepository;
+    private final GameRelicRepository gameRelicRepository;
 
     @Transactional
     public ResponseEntity<?> getGameBlocks(Game game) {
@@ -56,6 +59,8 @@ public class BlockService {
             Block block = new Block(storeBlock.getColor(), storeBlock.getShape(), game);
             blockRepository.save(block);
             storeBlockRepository.delete(storeBlock);
+
+            gameRelicRepository.findByGameAndRelicNumber(game, 24).ifPresent(eaterBlock -> eaterBlock.setRate(eaterBlock.getRate() + 0.1));
 
             return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreBlockResponseDto(can_buy, money, block));
         }

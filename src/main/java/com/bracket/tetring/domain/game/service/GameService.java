@@ -107,7 +107,11 @@ public class GameService {
         store.setRerollPrice(rerollPriceCalculator.getInitPrice(game));
 
         int roundGoal = getRoundGoal(game.getRoundNumber());
-        if(score >= roundGoal) {
+        boolean whiteSkull = gameRelicRepository.findByGameAndRelicNumber(game, 19).isPresent();//흰색 해골 블록
+        if(score >= roundGoal || (whiteSkull && score >= roundGoal * 0.25)) {
+            if(whiteSkull && score < roundGoal) {
+                gameRelicRepository.deleteByGameAndRelic_RelicNumber(game, 19);
+            }
             // 이겼을 경우
             boolean isWin = true;
             int nextRoundNumber = game.getRoundNumber() + 1;

@@ -4,6 +4,7 @@ import com.bracket.tetring.domain.game.domain.Game;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.domain.GameRelicId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,5 +24,6 @@ public interface GameRelicRepository extends JpaRepository<GameRelic, GameRelicI
     @Query("SELECT gr.slotNumber FROM GameRelic gr WHERE gr.game = :game")
     List<Integer> findUsedSlotNumbersByGame(@Param("game") Game game);
 
-
+    @Modifying
+    void deleteByGameAndRelic_RelicNumber(Game game, int relicNumber);
 }

@@ -30,7 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.bracket.tetring.global.error.ErrorCode.*;
+import static com.bracket.tetring.global.error.ErrorCode.GAME_NOT_FOUND;
+import static com.bracket.tetring.global.error.ErrorCode.STORE_NOT_FOUND;
 import static com.bracket.tetring.global.util.GameSettings.*;
 
 @Service
@@ -47,14 +48,12 @@ public class GameService {
     private final RelicSelector relicSelector;
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> checkPlayingGame(Long playerId) {
-        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(PLAYER_NOT_FOUND));
+    public ResponseEntity<?> checkPlayingGame(Player player) {
         return ResponseEntity.status(HttpStatus.OK).body(new GetCheckPlayingResponseDto(gameRepository.existsByPlayerAndIsPlayingTrue(player)));
     }
 
     @Transactional
-    public ResponseEntity<?> playGame(Long playerId) {
-        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(PLAYER_NOT_FOUND));
+    public ResponseEntity<?> playGame(Player player) {
         /*게임, 스코어 점수, 게임 블록, 게임 유물, 상점, 머니 가격, 상점 블록, 상점 유물*/
         if(gameRepository.existsByPlayerAndIsPlayingTrue(player)) {
             /*플레이할 게임이 존재할 경우 -> 기존에 게임에 대한 데이터 수집*/

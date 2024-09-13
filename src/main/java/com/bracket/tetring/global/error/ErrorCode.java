@@ -14,10 +14,13 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
 
     INVALID_GAME_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 게임 아이디입니다."),
+    INVALID_BLOCK_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 블록 아이디입니다."),
 
     PLAYER_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이어를 찾을 수 없습니다."),
     GAME_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 게임을 찾을 수 없습니다."),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 상점을 찾을 수 없습니다.");
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 상점을 찾을 수 없습니다."),
+    BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 블록을 찾을 수 없습니다."),
+    RELIC_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 유물을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

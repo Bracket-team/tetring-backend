@@ -6,6 +6,7 @@ import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.block.repository.StoreBlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
 import com.bracket.tetring.domain.game.dto.response.*;
+import com.bracket.tetring.domain.player.service.PlayerService;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.repository.GameRelicRepository;
 import com.bracket.tetring.domain.game.repository.GameRepository;
@@ -45,10 +46,13 @@ public class GameService {
 
     private final RelicSelector relicSelector;
     private final RerollPriceCalculator rerollPriceCalculator;
+
+    private final PlayerService playerService;
     private final Random random = new Random();
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> checkPlayingGame(Player player) {
+    public ResponseEntity<?> checkPlayingGame() {
+        Player player = playerService.findPlayer();
         return ResponseEntity.status(HttpStatus.OK).body(new GetCheckPlayingResponseDto(gameRepository.existsByPlayerAndIsPlayingTrue(player)));
     }
 

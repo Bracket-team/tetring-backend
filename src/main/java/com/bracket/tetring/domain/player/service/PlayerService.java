@@ -25,8 +25,8 @@ public class PlayerService {
     private final PlayerFoundRelicsRepository playerFoundRelicsRepository;
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> findAllFoundRelics(Long playerId) {
-        Player player = playerRepository.findById(playerId).orElseThrow(() -> new CustomValidationException(PLAYER_NOT_FOUND));
+    public ResponseEntity<?> findAllFoundRelics() {
+        Player player = findPlayer();
         return ResponseEntity.status(HttpStatus.OK).body(new GetPlayerFoundRelicsResponseDto(playerFoundRelicsRepository.findRelicsByPlayer(player)));
     }
 

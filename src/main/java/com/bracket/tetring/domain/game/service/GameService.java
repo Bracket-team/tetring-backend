@@ -92,7 +92,8 @@ public class GameService {
     }
 
     @Transactional
-    public ResponseEntity<?> getGameDetailsForNewRound(Game game) {
+    public ResponseEntity<?> getGameDetailsForNewRound() {
+        Game game = findPlayingGame();
         if(!game.getIsStore()) {
             throw new CustomException(ALREADY_IN_ROUND);
         }

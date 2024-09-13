@@ -22,4 +22,9 @@ public class GameController {
     public ResponseEntity<?> getStartGame() {
         return gameService.playGame();
     }
+
+    @GetMapping("/round/start")
+    public ResponseEntity<?> getRoundStart() {
+        return gameService.getGameDetailsForNewRound();
+    }
 }

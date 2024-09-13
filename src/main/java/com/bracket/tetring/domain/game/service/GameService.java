@@ -15,6 +15,7 @@ import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import com.bracket.tetring.domain.store.repository.StoreRepository;
+import com.bracket.tetring.domain.store.service.StoreService;
 import com.bracket.tetring.global.handler.CustomException;
 import com.bracket.tetring.global.util.GameSettings;
 import com.bracket.tetring.global.util.RelicSelector;
@@ -47,6 +48,7 @@ public class GameService {
     private final RerollPriceCalculator rerollPriceCalculator;
 
     private final PlayerService playerService;
+    private final StoreService storeService;
     private final Random random = new Random();
 
     @Transactional(readOnly = true)
@@ -106,7 +108,10 @@ public class GameService {
     }
 
     @Transactional
-    public ResponseEntity<?> getGameDetailsForEndRound(Game game, Store store, Long score) {
+    public ResponseEntity<?> getGameDetailsForEndRound(Long score) {
+        Game game = findPlayingGame();
+        Store store = storeService.findPlayingStore();
+
         if(game.getIsStore()) {
             throw new CustomException(ALREADY_IN_STORE);
         }

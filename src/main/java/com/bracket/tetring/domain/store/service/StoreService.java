@@ -3,6 +3,7 @@ package com.bracket.tetring.domain.store.service;
 import com.bracket.tetring.domain.block.domain.StoreBlock;
 import com.bracket.tetring.domain.block.repository.StoreBlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
+import com.bracket.tetring.domain.game.service.GameService;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.dto.response.GetMoneyResponseDto;
@@ -29,9 +30,18 @@ public class StoreService {
     private final StoreBlockRepository storeBlockRepository;
     private final StoreRelicRepository storeRelicRepository;
 
+    private final GameService gameService;
+
+    @Transactional
+    public Store findPlayingStore() {
+        Game game = gameService.findPlayingGame();
+        return storeRepository.findByGame(game).orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
+    }
+
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getStoreDetails(Game game) {
-        Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
+    public ResponseEntity<?> getStoreDetails() {
+        Game game = gameService.findPlayingGame();
+        Store store = findPlayingStore();
         int moneyLevelUpPrice = getMoneyLevelUpPrice(store.getMoneyLevel());
         List<StoreBlock> blocks = storeBlockRepository.findStoreBlocksByGame(game);
         List<StoreRelic> relics = storeRelicRepository.findByStore(store);

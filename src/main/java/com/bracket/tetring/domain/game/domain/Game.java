@@ -1,9 +1,7 @@
 package com.bracket.tetring.domain.game.domain;
 
 import com.bracket.tetring.domain.player.domain.Player;
-import com.bracket.tetring.domain.store.domain.Store;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -12,7 +12,6 @@ import com.bracket.tetring.domain.game.repository.GameRelicRepository;
 import com.bracket.tetring.domain.game.repository.GameRepository;
 import com.bracket.tetring.domain.player.domain.Player;
 import com.bracket.tetring.domain.player.repository.PlayerRepository;
-import com.bracket.tetring.domain.relic.domain.Relic;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;

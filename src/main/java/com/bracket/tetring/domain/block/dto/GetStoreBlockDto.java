@@ -1,6 +1,5 @@
 package com.bracket.tetring.domain.block.dto;
 
-import com.bracket.tetring.domain.block.domain.Block;
 import com.bracket.tetring.domain.block.domain.StoreBlock;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

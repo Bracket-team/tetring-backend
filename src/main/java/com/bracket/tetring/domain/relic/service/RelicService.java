@@ -52,7 +52,6 @@ public class RelicService {
     public ResponseEntity<?> purchaseStoreRelic(Game game, int slotNumber, Store store) {
         StoreRelic storeRelic = storeRelicRepository.findByStoreAndSlotNumber(store, slotNumber).orElseThrow(() -> new CustomValidationException(STORE_RELIC_NOT_FOUND));
         int money = store.getMoney();
-        // TODO : 슬롯이 가득 찼을 경우
         if(money >= storeRelic.getPrice()) {
             // 살 수 있는 경우
             boolean can_buy = true;
@@ -62,7 +61,6 @@ public class RelicService {
 
             Integer number = findLowestUnusedSlotNumber(game).orElseThrow(() -> new CustomValidationException(ARE_SLOTS_FULL));
 
-            // TODO : 비율 정하기, 슬롯 번호 가져오기
             GameRelic relic = new GameRelic(game, storeRelic.getRelic(), storeRelic.getRelic().getRate(), number);
             gameRelicRepository.save(relic);
             storeRelicRepository.delete(storeRelic);

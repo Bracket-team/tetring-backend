@@ -1,6 +1,6 @@
 package com.bracket.tetring.domain.relic.dto.response;
 
-import com.bracket.tetring.domain.game.domain.GameRelic;
+import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.dto.GetGameRelicDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

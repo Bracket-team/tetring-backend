@@ -5,7 +5,7 @@ import com.bracket.tetring.domain.block.domain.StoreBlock;
 import com.bracket.tetring.domain.block.dto.GetGameBlockDto;
 import com.bracket.tetring.domain.block.dto.GetStoreBlockDto;
 import com.bracket.tetring.domain.game.domain.Game;
-import com.bracket.tetring.domain.game.domain.GameRelic;
+import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.game.dto.GetGameDto;
 import com.bracket.tetring.domain.relic.dto.GetGameRelicDto;
 import com.bracket.tetring.domain.relic.dto.GetStoreRelicDto;

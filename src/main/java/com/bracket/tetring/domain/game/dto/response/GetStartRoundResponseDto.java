@@ -3,7 +3,7 @@ package com.bracket.tetring.domain.game.dto.response;
 import com.bracket.tetring.domain.block.domain.Block;
 import com.bracket.tetring.domain.block.dto.GetGameBlockDto;
 import com.bracket.tetring.domain.game.domain.Game;
-import com.bracket.tetring.domain.game.domain.GameRelic;
+import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.game.dto.GetGameDto;
 import com.bracket.tetring.domain.relic.dto.GetGameRelicDto;
 import com.fasterxml.jackson.annotation.JsonProperty;

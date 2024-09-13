@@ -1,13 +1,11 @@
 package com.bracket.tetring.domain.game.dto.response;
 
-import com.bracket.tetring.domain.game.domain.GameRelic;
+import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.dto.GetGameRelicDto;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.web.service.annotation.GetExchange;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package com.bracket.tetring.domain.game.domain;
+package com.bracket.tetring.domain.relic.domain;
 
-import com.bracket.tetring.domain.relic.domain.Relic;
+import com.bracket.tetring.domain.game.domain.Game;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

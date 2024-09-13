@@ -1,8 +1,8 @@
-package com.bracket.tetring.domain.game.repository;
+package com.bracket.tetring.domain.relic.repository;
 
 import com.bracket.tetring.domain.game.domain.Game;
-import com.bracket.tetring.domain.game.domain.GameRelic;
-import com.bracket.tetring.domain.game.domain.GameRelicId;
+import com.bracket.tetring.domain.relic.domain.GameRelic;
+import com.bracket.tetring.domain.relic.domain.GameRelicId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

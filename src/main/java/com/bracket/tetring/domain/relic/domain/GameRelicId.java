@@ -1,4 +1,4 @@
-package com.bracket.tetring.domain.game.domain;
+package com.bracket.tetring.domain.relic.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,6 @@
 package com.bracket.tetring.global.util;
 
-import com.bracket.tetring.domain.game.domain.GameRelic;
+import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.domain.Relic;
 import com.bracket.tetring.domain.relic.repository.RelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;

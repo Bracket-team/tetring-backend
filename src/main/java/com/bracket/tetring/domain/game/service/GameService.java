@@ -6,6 +6,7 @@ import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.block.repository.StoreBlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
 import com.bracket.tetring.domain.game.dto.response.GetStartRoundResponseDto;
+import com.bracket.tetring.domain.game.dto.response.UpdateEndRoundResponseDto;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.game.dto.response.GetCheckPlayingResponseDto;
 import com.bracket.tetring.domain.game.dto.response.GetPlayGameResponseDto;
@@ -30,8 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.bracket.tetring.global.error.ErrorCode.GAME_NOT_FOUND;
-import static com.bracket.tetring.global.error.ErrorCode.STORE_NOT_FOUND;
+import static com.bracket.tetring.global.error.ErrorCode.*;
 import static com.bracket.tetring.global.util.GameSettings.*;
 
 @Service
@@ -57,7 +57,7 @@ public class GameService {
         if(gameRepository.existsByPlayerAndIsPlayingTrue(player)) {
             /*플레이할 게임이 존재할 경우 -> 기존에 게임에 대한 데이터 수집*/
             Game game = gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomValidationException(GAME_NOT_FOUND));
-            int roundGoal = GameSettings.getRoundGoal(game.getRoundNumber());
+            int roundGoal = getRoundGoal(game.getRoundNumber());
             List<Block> gameBlocks = blockRepository.findBlocksInGame(game);
             List<GameRelic> gameRelics = gameRelicRepository.findByGame(game);
             Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomValidationException(STORE_NOT_FOUND));
@@ -69,7 +69,7 @@ public class GameService {
         /*게임이 존재하지 않을 경우 초기화*/
         Game game = new Game(1, false, player, LocalDateTime.now(), 0L, true);
         gameRepository.save(game);
-        int roundGoal = GameSettings.getRoundGoal(game.getRoundNumber());
+        int roundGoal = getRoundGoal(game.getRoundNumber());
         List<Block> gameBlocks = initialBlocks(game);
         List<GameRelic> gameRelics = new ArrayList<>();
         Store store = new Store(game, REROLL_INITIAL_PRICE, INITIAL_MONEY, 1);
@@ -82,10 +82,50 @@ public class GameService {
 
     @Transactional
     public ResponseEntity<?> getGameDetailsForNewRound(Game game) {
-        int roundGoal = GameSettings.getRoundGoal(game.getRoundNumber());
+        if(!game.getIsStore()) {
+            throw new CustomValidationException(ALREADY_IN_ROUND);
+        }
+        game.setIsStore(false);
+
+        int roundGoal = getRoundGoal(game.getRoundNumber());
         List<Block> blocks = blockRepository.findBlocksInGame(game);
         List<GameRelic> relics = gameRelicRepository.findByGame(game);
         return ResponseEntity.status(HttpStatus.OK).body(new GetStartRoundResponseDto(game, roundGoal, blocks, relics));
+    }
+
+    @Transactional
+    public ResponseEntity<?> getGameDetailsForEndRound(Game game, Store store, Long score) {
+        if(game.getIsStore()) {
+            throw new CustomValidationException(ALREADY_IN_STORE);
+        }
+        game.setIsStore(true);
+
+        //최고 기록 확인
+        if(game.getBestScore() < score)
+            game.setBestScore(score);
+
+        //리롤 가격 초기화
+        store.setRerollPrice(REROLL_INITIAL_PRICE);
+
+        int roundGoal = getRoundGoal(game.getRoundNumber());
+        if(score >= roundGoal) {
+            // 이겼을 경우
+            boolean isWin = true;
+            int nextRoundNumber = game.getRoundNumber() + 1;
+            game.setRoundNumber(nextRoundNumber);
+            int nextRoundGoal = getRoundGoal(nextRoundNumber);
+            int nextMoney = store.getMoney() + getMoney(store.getMoneyLevel());
+            store.setMoney(nextMoney);
+            return ResponseEntity.status(HttpStatus.OK).body(new UpdateEndRoundResponseDto(isWin, nextRoundNumber, nextRoundGoal, nextMoney));
+        }
+        else {
+            // 졌을 경우
+            boolean isWin = false;
+            int nextRoundNumber = game.getRoundNumber();
+            int nextRoundGoal = getRoundGoal(nextRoundNumber);
+            int nextMoney = store.getMoney();
+            return ResponseEntity.status(HttpStatus.OK).body(new UpdateEndRoundResponseDto(isWin, nextRoundNumber, nextRoundGoal, nextMoney));
+        }
     }
 
     private List<Block> initialBlocks(Game game) {

@@ -2,6 +2,7 @@ package com.bracket.tetring.domain.store.dto.response;
 
 import com.bracket.tetring.domain.relic.dto.GetStoreRelicDto;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,13 +14,14 @@ import static com.bracket.tetring.domain.relic.dto.GetStoreRelicDto.convertToSto
 
 @Getter
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetRerollRelicResponseDto {
     private String status;
     private Data data;
 
     public GetRerollRelicResponseDto(boolean canReroll, int nextRerollPrice, int remainedMoney, List<StoreRelic> relics) {
-        this.status = "succcess";
-        this.data = new Data(canReroll, nextRerollPrice, remainedMoney, convertToStoreRelicDtoList(relics));
+        this.status = "success";
+        this.data = new Data(canReroll, nextRerollPrice, remainedMoney, relics != null ? convertToStoreRelicDtoList(relics) : null);
     }
 
     @Getter

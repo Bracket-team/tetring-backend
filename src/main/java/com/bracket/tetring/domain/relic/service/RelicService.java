@@ -7,10 +7,13 @@ import com.bracket.tetring.domain.relic.dto.response.GetRelicExistResponseDto;
 import com.bracket.tetring.domain.relic.repository.GameRelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
+import com.bracket.tetring.domain.store.dto.response.GetRerollRelicResponseDto;
 import com.bracket.tetring.domain.store.dto.response.PurchaseStoreRelicResponseDto;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.CustomValidationException;
+import com.bracket.tetring.global.util.GameSettings;
+import com.bracket.tetring.global.util.RelicSelector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +25,14 @@ import java.util.Optional;
 
 import static com.bracket.tetring.global.error.ErrorCode.ARE_SLOTS_FULL;
 import static com.bracket.tetring.global.error.ErrorCode.STORE_RELIC_NOT_FOUND;
+import static com.bracket.tetring.global.util.GameSettings.REROLL_UPDATE_PRICE;
 
 @Service
 @RequiredArgsConstructor
 public class RelicService {
     private final GameRelicRepository gameRelicRepository;
     private final StoreRelicRepository storeRelicRepository;
+    private final RelicSelector relicSelector;
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getGameRelics(Game game) {
@@ -54,7 +59,7 @@ public class RelicService {
         int money = store.getMoney();
         if(money >= storeRelic.getPrice()) {
             // 살 수 있는 경우
-            boolean can_buy = true;
+            boolean canBuy = true;
 
             money -= storeRelic.getPrice();
             store.setMoney(money);
@@ -65,12 +70,40 @@ public class RelicService {
             gameRelicRepository.save(relic);
             storeRelicRepository.delete(storeRelic);
 
-            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(can_buy, money, relic));
+            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, relic));
         }
         else {
             // 살 수 없는 경우
-            boolean can_buy = false;
-            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(can_buy, money, null));
+            boolean canBuy = false;
+            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, null));
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<?> rerollRelic(Store store) {
+        int money = store.getMoney();
+        int rerollPrice = store.getRerollPrice();
+        if (money >= rerollPrice) {
+            // 리롤 가능한 경우
+            boolean canReroll = true;
+            //돈 삭감
+            money -= rerollPrice;
+            store.setMoney(money);
+            //리롤 가격 조정
+            rerollPrice += REROLL_UPDATE_PRICE;
+            store.setRerollPrice(rerollPrice);
+
+            //상점에 있는 유물들 다 버리고 새로 뽑아야 함
+            storeRelicRepository.deleteByStore(store);
+            List<GameRelic> relics = gameRelicRepository.findByGame(store.getGame());
+            List<StoreRelic> randomRelics = relicSelector.getRandomRelics(store, relics);
+
+            return ResponseEntity.status(HttpStatus.OK).body(new GetRerollRelicResponseDto(canReroll, rerollPrice, money, randomRelics));
+        }
+        else {
+            // 리롤 불가능한 경우
+            boolean canReroll = false;
+            return ResponseEntity.status(HttpStatus.OK).body(new GetRerollRelicResponseDto(canReroll, rerollPrice, money, null));
         }
     }
 

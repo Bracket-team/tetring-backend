@@ -15,4 +15,6 @@ public interface StoreRelicRepository extends JpaRepository<StoreRelic, StoreRel
 
     @Query("SELECT sr FROM StoreRelic sr WHERE sr.store = :store AND sr.slotNumber = :slotNumber")
     Optional<StoreRelic> findByStoreAndSlotNumber(@Param("store") Store store, @Param("slotNumber") int slotNumber);
+
+    void deleteByStore(Store store);
 }

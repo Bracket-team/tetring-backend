@@ -20,6 +20,7 @@ import com.bracket.tetring.global.handler.CustomValidationException;
 import com.bracket.tetring.global.util.GameSettings;
 import com.bracket.tetring.global.util.RelicSelector;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ import java.util.Random;
 import static com.bracket.tetring.global.util.GameSettings.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GameService {
     private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;

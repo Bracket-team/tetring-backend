@@ -5,6 +5,10 @@ import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.dto.response.GetGameRelicsResponseDto;
 import com.bracket.tetring.domain.relic.dto.response.GetRelicExistResponseDto;
 import com.bracket.tetring.domain.relic.repository.GameRelicRepository;
+import com.bracket.tetring.domain.store.domain.Store;
+import com.bracket.tetring.domain.store.domain.StoreRelic;
+import com.bracket.tetring.domain.store.dto.response.PurchaseStoreRelicResponseDto;
+import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
 import com.bracket.tetring.global.error.ErrorCode;
 import com.bracket.tetring.global.handler.CustomValidationException;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.bracket.tetring.global.error.ErrorCode.ARE_SLOTS_FULL;
+import static com.bracket.tetring.global.error.ErrorCode.STORE_RELIC_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class RelicService {
     private final GameRelicRepository gameRelicRepository;
+    private final StoreRelicRepository storeRelicRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getGameRelics(Game game) {
@@ -38,5 +46,43 @@ public class RelicService {
         GameRelic relic = gameRelicRepository.findByGameAndSlotNumber(game, slotNumber).orElseThrow(() -> new CustomValidationException(ErrorCode.RELIC_NOT_FOUND));
         gameRelicRepository.delete(relic);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Transactional
+    public ResponseEntity<?> purchaseStoreRelic(Game game, int slotNumber, Store store) {
+        StoreRelic storeRelic = storeRelicRepository.findByStoreAndSlotNumber(store, slotNumber).orElseThrow(() -> new CustomValidationException(STORE_RELIC_NOT_FOUND));
+        int money = store.getMoney();
+        // TODO : 슬롯이 가득 찼을 경우
+        if(money >= storeRelic.getPrice()) {
+            // 살 수 있는 경우
+            boolean can_buy = true;
+
+            money -= storeRelic.getPrice();
+            store.setMoney(money);
+
+            Integer number = findLowestUnusedSlotNumber(game).orElseThrow(() -> new CustomValidationException(ARE_SLOTS_FULL));
+
+            // TODO : 비율 정하기, 슬롯 번호 가져오기
+            GameRelic relic = new GameRelic(game, storeRelic.getRelic(), storeRelic.getRelic().getRate(), number);
+            gameRelicRepository.save(relic);
+            storeRelicRepository.delete(storeRelic);
+
+            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(can_buy, money, relic));
+        }
+        else {
+            // 살 수 없는 경우
+            boolean can_buy = false;
+            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(can_buy, money, null));
+        }
+    }
+
+    private Optional<Integer> findLowestUnusedSlotNumber(Game game) {
+        List<Integer> usedSlots = gameRelicRepository.findUsedSlotNumbersByGame(game);
+        for (int i = 1; i <= 5; i++) {
+            if (!usedSlots.contains(i)) {
+                return Optional.of(i); // 사용되지 않은 가장 낮은 슬롯 번호 반환
+            }
+        }
+        return Optional.empty(); // 모든 슬롯이 사용 중인 경우
     }
 }

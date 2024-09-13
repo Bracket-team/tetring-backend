@@ -62,8 +62,7 @@ public class BlockService {
         else {
             //블록을 살 수 없는 경우 -> 변화 X
             boolean can_buy = false;
-            Block block = new Block(storeBlock.getColor(), storeBlock.getShape(), game);
-            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreBlockResponseDto(can_buy, money, block));
+            return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreBlockResponseDto(can_buy, money, null));
         }
     }
 }

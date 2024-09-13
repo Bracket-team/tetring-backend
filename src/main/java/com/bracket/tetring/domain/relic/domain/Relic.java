@@ -26,4 +26,6 @@ public class Relic {
     @Column(nullable = false)
     private String rarity;
     //normal, rare, ultra
+
+    private Double rate;
 }

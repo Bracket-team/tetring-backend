@@ -20,6 +20,7 @@ public enum ErrorCode {
     ALREADY_IN_ROUND(HttpStatus.BAD_REQUEST, "플레이어가 이미 라운드를 시작했습니다."),
     ALREADY_IN_STORE(HttpStatus.BAD_REQUEST, "플레이어가 이미 상점에 있습니다."),
 
+    ARE_SLOTS_FULL(HttpStatus.BAD_REQUEST, "슬롯이 가득차 있습니다."),
     PLAYER_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이어를 찾을 수 없습니다."),
     GAME_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 게임을 찾을 수 없습니다."),
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 상점을 찾을 수 없습니다."),

@@ -28,6 +28,8 @@ public class Store {
     @Column(nullable = false)
     private Integer moneyLevel;
 
+    private Boolean useCoupon;
+
     public Store(Game game, Integer rerollPrice, Integer money, Integer moneyLevel) {
         this.game = game;
         this.rerollPrice = rerollPrice;

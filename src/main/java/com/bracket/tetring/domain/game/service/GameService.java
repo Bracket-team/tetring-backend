@@ -17,6 +17,7 @@ import com.bracket.tetring.domain.store.repository.StoreRepository;
 import com.bracket.tetring.global.handler.CustomValidationException;
 import com.bracket.tetring.global.util.GameSettings;
 import com.bracket.tetring.global.util.RelicSelector;
+import com.bracket.tetring.global.util.RerollPriceCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,7 @@ public class GameService {
     private final StoreRelicRepository storeRelicRepository;
 
     private final RelicSelector relicSelector;
+    private final RerollPriceCalculator rerollPriceCalculator;
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> checkPlayingGame(Player player) {
@@ -69,7 +71,7 @@ public class GameService {
         int roundGoal = getRoundGoal(game.getRoundNumber());
         List<Block> gameBlocks = initialBlocks(game);
         List<GameRelic> gameRelics = new ArrayList<>();
-        Store store = new Store(game, REROLL_INITIAL_PRICE, INITIAL_MONEY, 1);
+        Store store = new Store(game, rerollPriceCalculator.getInitPrice(game), INITIAL_MONEY, 1);
         storeRepository.save(store);
         int moneyLevelUpPrice = getMoneyLevelUpPrice(store.getMoneyLevel());
         List<StoreBlock> storeBlocks = initialStoreBlocks(game);
@@ -102,7 +104,7 @@ public class GameService {
             game.setBestScore(score);
 
         //리롤 가격 초기화
-        store.setRerollPrice(REROLL_INITIAL_PRICE);
+        store.setRerollPrice(rerollPriceCalculator.getInitPrice(game));
 
         int roundGoal = getRoundGoal(game.getRoundNumber());
         if(score >= roundGoal) {

@@ -70,6 +70,11 @@ public class RelicService {
             gameRelicRepository.save(relic);
             storeRelicRepository.delete(storeRelic);
 
+            // 특정 유물 관련 세팅
+            if(relic.getRelic().getRelicNumber() == 10) { //쿠폰 블록
+                store.setUseCoupon(false);
+            }
+
             return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, relic));
         }
         else {

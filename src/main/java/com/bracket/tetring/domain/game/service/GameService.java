@@ -48,7 +48,6 @@ public class GameService {
     private final RerollPriceCalculator rerollPriceCalculator;
 
     private final PlayerService playerService;
-    private final StoreService storeService;
     private final Random random = new Random();
 
     @Transactional(readOnly = true)
@@ -110,7 +109,7 @@ public class GameService {
     @Transactional
     public ResponseEntity<?> getGameDetailsForEndRound(Long score) {
         Game game = findPlayingGame();
-        Store store = storeService.findPlayingStore();
+        Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
 
         if(game.getIsStore()) {
             throw new CustomException(ALREADY_IN_STORE);
@@ -177,7 +176,7 @@ public class GameService {
     @Transactional
     public ResponseEntity<?> getGameResult() {
         Game game = findPlayingGame();
-        Store store = storeService.findPlayingStore();
+        Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
         if(!game.getIsPlaying()) {
             throw new CustomException(ALREADY_END_GAME);
         }

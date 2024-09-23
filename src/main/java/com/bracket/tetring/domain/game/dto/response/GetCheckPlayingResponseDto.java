@@ -20,7 +20,11 @@ public class GetCheckPlayingResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
-        @JsonProperty("is_playing")
         private boolean isPlaying;
+
+        @JsonProperty("is_playing")
+        public boolean getIsPlaying() {
+            return isPlaying;
+        }
     }
 }

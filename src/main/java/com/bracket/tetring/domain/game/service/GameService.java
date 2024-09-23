@@ -78,7 +78,7 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.OK).body(new GetPlayGameResponseDto(game, roundGoal, gameBlocks, gameRelics, store, moneyLevelUpPrice, storeBlocks, storeRelics));
         }
         /*게임이 존재하지 않을 경우 초기화*/
-        Game game = new Game(1, false, player, LocalDateTime.now(), 0L, true);
+        Game game = new Game(1, true, player, LocalDateTime.now(), 0L, true);
         gameRepository.save(game);
         int roundGoal = getRoundGoal(game.getRoundNumber());
         List<Block> gameBlocks = initialBlocks(game);

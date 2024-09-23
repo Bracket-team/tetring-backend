@@ -72,6 +72,12 @@ public class RelicSelector {
                 .filter(relic -> relic.getRarity().equals(selectedRarity))
                 .toList();
 
+        if (filteredRelics.isEmpty()) {
+            // 다른 희귀도의 유물을 선택하거나 예외 처리
+            // 예를 들어, 다시 랜덤하게 희귀도를 선택하거나 기본 희귀도로 설정
+            filteredRelics = availableRelics; // 모든 희귀도의 유물을 사용
+        }
+
         return filteredRelics.get(random.nextInt(filteredRelics.size()));
     }
 }

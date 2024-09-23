@@ -4,6 +4,10 @@ import com.bracket.tetring.domain.block.domain.Block;
 import com.bracket.tetring.domain.block.repository.BlockRepository;
 import com.bracket.tetring.domain.game.domain.Game;
 import com.bracket.tetring.domain.game.service.GameService;
+import com.bracket.tetring.domain.player.domain.Player;
+import com.bracket.tetring.domain.player.domain.PlayerFoundRelics;
+import com.bracket.tetring.domain.player.repository.PlayerFoundRelicsRepository;
+import com.bracket.tetring.domain.player.service.PlayerService;
 import com.bracket.tetring.domain.relic.domain.GameRelic;
 import com.bracket.tetring.domain.relic.dto.response.GetGameRelicsResponseDto;
 import com.bracket.tetring.domain.relic.dto.response.GetRelicExistResponseDto;
@@ -36,12 +40,14 @@ import static com.bracket.tetring.global.util.GameSettings.BLOCKS;
 @Service
 @RequiredArgsConstructor
 public class RelicService {
+    private final PlayerService playerService;
     private final GameService gameService;
     private final StoreService storeService;
 
     private final GameRelicRepository gameRelicRepository;
     private final StoreRelicRepository storeRelicRepository;
     private final BlockRepository blockRepository;
+    private final PlayerFoundRelicsRepository playerFoundRelicsRepository;
 
     private final RelicSelector relicSelector;
     private final RerollPriceCalculator rerollPriceCalculator;
@@ -87,6 +93,9 @@ public class RelicService {
             gameRelicRepository.save(relic);
             storeRelicRepository.delete(storeRelic);
 
+            //플레이어가 발견한 유물 저장
+            savePlayerFoundRelic(relic);
+
             // 특정 유물 관련 세팅
             if(relic.getRelic().getRelicNumber() == 10) { //쿠폰 블록
                 store.setUseCoupon(false);
@@ -114,6 +123,11 @@ public class RelicService {
             List<Block> blocks = new ArrayList<>();
             return ResponseEntity.status(HttpStatus.OK).body(new PurchaseStoreRelicResponseDto(canBuy, money, null, blocks));
         }
+    }
+
+    private void savePlayerFoundRelic(GameRelic relic) {
+        Player player = playerService.findPlayer();
+        playerFoundRelicsRepository.save(new PlayerFoundRelics(player, relic.getRelic()));
     }
 
     @Transactional

@@ -17,7 +17,6 @@ import java.util.Random;
 public class RelicSelector {
     private final RelicRepository relicRepository;
     private final StoreRelicRepository storeRelicRepository;
-    private final Random random = new Random();
 
     private List<Relic> allRelics;
 
@@ -57,6 +56,7 @@ public class RelicSelector {
     }
 
     private Relic getRelicByRarity(List<Relic> availableRelics) {
+        Random random = new Random();
         int rarityPick = random.nextInt(6);
         String selectedRarity;
 

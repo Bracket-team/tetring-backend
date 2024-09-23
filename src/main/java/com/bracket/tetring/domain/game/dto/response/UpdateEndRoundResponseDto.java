@@ -1,6 +1,7 @@
 package com.bracket.tetring.domain.game.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class UpdateEndRoundResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
+        @Getter(AccessLevel.NONE)
         @JsonProperty("is_win")
         private boolean isWin;
 

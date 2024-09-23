@@ -3,9 +3,11 @@ package com.bracket.tetring.domain.store.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class PurchaseStoreRelicRequestDto {
     @JsonProperty("slot_number")

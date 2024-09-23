@@ -3,9 +3,11 @@ package com.bracket.tetring.domain.block.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class UpdateBlockShapeRequestDto {
     @JsonProperty("block_id")

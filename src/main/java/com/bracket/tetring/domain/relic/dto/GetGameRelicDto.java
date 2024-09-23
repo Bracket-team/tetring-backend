@@ -14,7 +14,7 @@ public class GetGameRelicDto {
     private String name;
     private String rarity;
     private String effect;
-    private double rate;
+    private Double rate;
 
     @JsonProperty("slot_number")
     private int slotNumber;

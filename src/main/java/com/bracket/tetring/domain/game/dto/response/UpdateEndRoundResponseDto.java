@@ -32,5 +32,10 @@ public class UpdateEndRoundResponseDto {
         private int nextRoundGoal;
 
         private int money;
+
+        @JsonProperty("is_win")
+        public boolean getIsWin() {
+            return isWin;
+        }
     }
 }

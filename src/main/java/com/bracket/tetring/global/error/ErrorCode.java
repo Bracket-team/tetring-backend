@@ -27,7 +27,9 @@ public enum ErrorCode {
     BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 블록을 찾을 수 없습니다."),
     STORE_BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "상점 블록을 찾을 수 없습니다."),
     RELIC_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이 중인 유물을 찾을 수 없습니다."),
-    STORE_RELIC_NOT_FOUND(HttpStatus.NOT_FOUND, "상점 유물을 찾을 수 없습니다.");
+    STORE_RELIC_NOT_FOUND(HttpStatus.NOT_FOUND, "상점 유물을 찾을 수 없습니다."),
+
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러 입니다.");
 
 
     private final HttpStatus httpStatus;

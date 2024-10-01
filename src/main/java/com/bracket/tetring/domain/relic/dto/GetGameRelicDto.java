@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class GetGameRelicDto {
+    @JsonProperty("relic_number")
+    private int relicNumber;
     private String name;
     private String rarity;
     private String effect;
@@ -20,6 +22,7 @@ public class GetGameRelicDto {
     private int slotNumber;
 
     public GetGameRelicDto(GameRelic relic) {
+        this.relicNumber = relic.getRelic().getRelicNumber();
         this.name = relic.getRelic().getName();
         this.rarity = relic.getRelic().getRarity();
         this.effect = relic.getRelic().getEffect();

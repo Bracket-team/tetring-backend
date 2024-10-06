@@ -20,6 +20,8 @@ import com.bracket.tetring.global.util.GameSettings;
 import com.bracket.tetring.global.util.RelicSelector;
 import com.bracket.tetring.global.util.RerollPriceCalculator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,13 @@ public class GameService {
     public Game findPlayingGame() {
         Player player = playerService.findPlayer();
         return gameRepository.findByPlayerAndIsPlayingTrue(player).orElseThrow(() -> new CustomException(GAME_NOT_FOUND));
+    }
+
+    @Transactional
+    public ResponseEntity<?> getRanking(int playerNumber) {
+        Pageable pageable = PageRequest.of(0, playerNumber);
+        List<Game> games = gameRepository.findTopPlayersByBestScore(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(new GetPlayerRankingResponseDto(games));
     }
 
     @Transactional

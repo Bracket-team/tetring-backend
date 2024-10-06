@@ -1,5 +1,6 @@
 package com.bracket.tetring.domain.game.controller;
 
+import com.bracket.tetring.domain.game.dto.request.GetPlayerRankingRequestDto;
 import com.bracket.tetring.domain.game.dto.request.UpdateEndRoundRequestDto;
 import com.bracket.tetring.domain.game.service.GameService;
 import jakarta.validation.Valid;
@@ -20,6 +21,22 @@ public class GameController {
     @GetMapping("/check")
     public ResponseEntity<?> getPlayingGame() {
         return gameService.checkPlayingGame();
+    }
+
+    @GetMapping("/ranking")
+    public ResponseEntity<?> getPlayerRankings(@Valid @RequestBody GetPlayerRankingRequestDto requestDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            // 에러 메시지 추출
+            List<String> errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+
+            // 에러 응답을 생성하여 반환
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+        else {
+            return gameService.getRanking(requestDto.getNumber());
+        }
     }
 
     @GetMapping("/start")

@@ -6,7 +6,6 @@ import com.bracket.tetring.domain.relic.repository.RelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j

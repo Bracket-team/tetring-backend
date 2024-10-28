@@ -12,8 +12,8 @@ public class GameSettings {
 
     public static final Block[] BLOCKS = {
             new Block("0010001000100010", "하늘색"), // I 블록
-            new Block("0100010001100000", "파란색"), // J 블록
-            new Block("0010001000110000", "귤색"),  // L 블록
+            new Block("0010001001100000", "파란색"), // J 블록
+            new Block("0100010001100000", "귤색"),  // L 블록
             new Block("0110011000000000", "노란색"), // O 블록
             new Block("0011011000000000", "연두색"), // S 블록
             new Block("0010001100100000", "자주색"), // T 블록

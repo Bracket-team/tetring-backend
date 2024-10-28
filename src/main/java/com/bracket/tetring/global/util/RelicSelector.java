@@ -6,32 +6,33 @@ import com.bracket.tetring.domain.relic.repository.RelicRepository;
 import com.bracket.tetring.domain.store.domain.Store;
 import com.bracket.tetring.domain.store.domain.StoreRelic;
 import com.bracket.tetring.domain.store.repository.StoreRelicRepository;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class RelicSelector {
     private final RelicRepository relicRepository;
     private final StoreRelicRepository storeRelicRepository;
-
-    private List<Relic> allRelics;
 
     @Autowired
     public RelicSelector(RelicRepository relicRepository, StoreRelicRepository storeRelicRepository) {
         this.relicRepository = relicRepository;
         this.storeRelicRepository = storeRelicRepository;
-        loadRelicsFromRepository();
     }
 
-    private void loadRelicsFromRepository() {
-        this.allRelics = relicRepository.findAll();
-    }
-
+    @Transactional
     public List<StoreRelic> getRandomRelics(Store store, List<GameRelic> playerRelics) {
+        List<Relic> allRelics = relicRepository.findAll();
         List<Relic> playerRelicList = playerRelics.stream()
                 .map(GameRelic::getRelic)
                 .toList();
@@ -61,7 +62,7 @@ public class RelicSelector {
         String selectedRarity;
 
         if (rarityPick < 3) {
-            selectedRarity = "common";
+            selectedRarity = "normal";
         } else if (rarityPick < 5) {
             selectedRarity = "rare";
         } else {
@@ -73,9 +74,8 @@ public class RelicSelector {
                 .toList();
 
         if (filteredRelics.isEmpty()) {
-            // 다른 희귀도의 유물을 선택하거나 예외 처리
-            // 예를 들어, 다시 랜덤하게 희귀도를 선택하거나 기본 희귀도로 설정
-            filteredRelics = availableRelics; // 모든 희귀도의 유물을 사용
+            System.out.println("Filtered relics are empty. Selected rarity: " + selectedRarity);
+            throw new NoSuchElementException("No relics available after filtering.");
         }
 
         return filteredRelics.get(random.nextInt(filteredRelics.size()));

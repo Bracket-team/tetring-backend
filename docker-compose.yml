@@ -1,35 +1,59 @@
-version: '3'
+version: '3.8'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+    image:
+      ustaf/tetring-server:1.4
+    platform: linux/amd64
     ports:
       - "8080:8080"
+    restart:
+      on-failure
     depends_on:
       - redis
-    #image: ustaf/tetring-server:1.1
-    environment:
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_SECRET_KEY: ${GOOGLE_SECRET_KEY}
-      NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
-      NAVER_SECRET_KEY: ${NAVER_SECRET_KEY}
-      KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
-      KAKAO_SECRET_KEY: ${KAKAO_SECRET_KEY}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      MYSQL_HOST: ${MYSQL_HOST}
-      MYSQL_PORT: ${MYSQL_PORT}
-      MYSQL_DB: ${MYSQL_DB}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      - mysql
+    env_file:
+      - ./.env
+    networks:
+      - tetring-network
 
   redis:
     image: redis:latest
+#    platform: linux/amd64
     command:
-      redis-server --requirepass 1234
+      redis-server --requirepass ${REDIS_PASSWORD}
     ports:
       - "6379:6379"
+    networks:
+      - tetring-network
+
+  mysql:
+    image: mysql:8.0.37
+#    platform: linux/amd64
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: 'Asia/Seoul'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--skip-character-set-client-handshake"
+#    healthcheck:
+#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+#      interval: 3s
+#      timeout: 20s
+#      retries: 5
+    networks:
+      - tetring-network
+
+networks:
+  tetring-network:
+    driver: bridge

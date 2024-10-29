@@ -107,11 +107,12 @@ public class GameService {
             throw new CustomException(ALREADY_IN_ROUND);
         }
         game.setIsStore(false);
+        Store store = storeRepository.findByGame(game).orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
 
         int roundGoal = getRoundGoal(game.getRoundNumber());
         List<Block> blocks = blockRepository.findBlocksInGame(game);
         List<GameRelic> relics = gameRelicRepository.findByGame(game);
-        return ResponseEntity.status(HttpStatus.OK).body(new GetStartRoundResponseDto(game, roundGoal, blocks, relics));
+        return ResponseEntity.status(HttpStatus.OK).body(new GetStartRoundResponseDto(game, roundGoal, blocks, relics, store.getMoney()));
     }
 
     @Transactional

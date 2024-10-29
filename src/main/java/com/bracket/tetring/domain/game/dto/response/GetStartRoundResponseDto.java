@@ -22,9 +22,9 @@ public class GetStartRoundResponseDto {
     private String status;
     private Data data;
 
-    public GetStartRoundResponseDto(Game game, int roundGoal, List<Block> blocks, List<GameRelic> relics) {
+    public GetStartRoundResponseDto(Game game, int roundGoal, List<Block> blocks, List<GameRelic> relics, int money) {
         this.status = "success";
-        this.data = new Data(new GetGameDto(game, roundGoal), convertToGameBlockDtoList(blocks), convertToGameRelicDtoList(relics));
+        this.data = new Data(new GetGameDto(game, roundGoal), convertToGameBlockDtoList(blocks), convertToGameRelicDtoList(relics), money);
     }
 
     @Getter
@@ -38,5 +38,7 @@ public class GetStartRoundResponseDto {
 
         @JsonProperty("player_relics")
         private List<GetGameRelicDto> playerRelic;
+
+        private int money;
     }
 }

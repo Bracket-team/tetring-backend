@@ -34,7 +34,7 @@ public class GameSettings {
 
     public static int getPriceByRarity(String rarity) {
         return switch (rarity) {
-            case "common" -> 3;
+            case "normal" -> 3;
             case "rare" -> 5;
             case "unique" -> 10;
             default -> 0;

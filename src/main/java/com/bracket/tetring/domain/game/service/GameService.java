@@ -145,6 +145,11 @@ public class GameService {
             int nextRoundGoal = getRoundGoal(nextRoundNumber);
             int nextMoney = store.getMoney() + getMoney(store.getMoneyLevel());
 
+            //상점 정보 초기화
+            List<GameRelic> playerRelics = gameRelicRepository.findByGame(game);
+            List<StoreBlock> storeBlocks = initialStoreBlocks(game);
+            List<StoreRelic> storeRelics = relicSelector.getRandomRelics(store, playerRelics);
+
             boolean overworkBlock = gameRelicRepository.findByGameAndRelicNumber(game, 7).isPresent();//초과 근무 블록
             if(overworkBlock) {
                 nextMoney += (int) ((score - roundGoal) / 1000);
@@ -211,6 +216,9 @@ public class GameService {
     }
 
     private List<StoreBlock> initialStoreBlocks(Game game) {
+        //기존에 있는 상점 블록 삭제
+        storeBlockRepository.deleteByGame(game);
+
         List<StoreBlock> storeBlocks = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 3; i++) {

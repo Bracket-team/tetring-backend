@@ -30,6 +30,9 @@ public class RelicSelector {
 
     @Transactional
     public List<StoreRelic> getRandomRelics(Store store, List<GameRelic> playerRelics) {
+        //기존에 있는 상점 relic 삭제
+        storeRelicRepository.deleteByStore(store);
+
         List<Relic> allRelics = relicRepository.findAll();
         List<Relic> playerRelicList = playerRelics.stream()
                 .map(GameRelic::getRelic)

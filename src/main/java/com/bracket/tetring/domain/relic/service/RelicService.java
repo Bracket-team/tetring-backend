@@ -146,8 +146,6 @@ public class RelicService {
             rerollPrice = rerollPriceCalculator.getRerollPrice(game, store);
             store.setRerollPrice(rerollPrice);
 
-            //상점에 있는 유물들 다 버리고 새로 뽑아야 함
-            storeRelicRepository.deleteByStore(store);
             List<GameRelic> relics = gameRelicRepository.findByGame(store.getGame());
             List<StoreRelic> randomRelics = relicSelector.getRandomRelics(store, relics);
 

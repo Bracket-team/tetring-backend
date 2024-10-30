@@ -15,4 +15,6 @@ public interface StoreBlockRepository extends JpaRepository<StoreBlock, Long> {
 
     @Query("SELECT sb FROM  StoreBlock sb WHERE sb.game = :game AND sb.slotNumber = :slotNumber")
     Optional<StoreBlock> findStoreBlockByGameAndSlotNumber(@Param("game") Game game, @Param("slotNumber") int slotNumber);
+
+    void deleteByGame(Game game);
 }

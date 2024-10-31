@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetPlayerRankingRequestDto {
-    @Min(0)
+    @Min(1)
     private int number;
 }

@@ -20,8 +20,10 @@ import com.bracket.tetring.global.util.GameSettings;
 import com.bracket.tetring.global.util.RelicSelector;
 import com.bracket.tetring.global.util.RerollPriceCalculator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,10 +33,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static com.bracket.tetring.global.error.ErrorCode.*;
 import static com.bracket.tetring.global.util.GameSettings.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GameService {
@@ -65,9 +69,15 @@ public class GameService {
 
     @Transactional
     public ResponseEntity<?> getRanking(int playerNumber) {
-        Pageable pageable = PageRequest.of(0, playerNumber);
-        List<Game> games = gameRepository.findTopPlayersByBestScore(pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(new GetPlayerRankingResponseDto(games));
+        log.info("playerNumber={}",playerNumber);
+        Pageable pageable = PageRequest.of(0, playerNumber, Sort.by(Sort.Direction.DESC, "bestScore"));
+        List<Game> topGames = gameRepository.findAll(pageable).getContent();
+
+        List<GetPlayerRankingResponseDto.PlayerScoreDto> playerScores = topGames.stream()
+                .map(game -> new GetPlayerRankingResponseDto.PlayerScoreDto(game.getPlayer().getUsername(), game.getBestScore(), topGames.indexOf(game) + 1))
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(new GetPlayerRankingResponseDto(playerScores));
     }
 
     @Transactional

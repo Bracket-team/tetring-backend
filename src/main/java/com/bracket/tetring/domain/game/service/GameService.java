@@ -33,7 +33,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static com.bracket.tetring.global.error.ErrorCode.*;
 import static com.bracket.tetring.global.util.GameSettings.*;
@@ -157,8 +156,8 @@ public class GameService {
 
             //상점 정보 초기화
             List<GameRelic> playerRelics = gameRelicRepository.findByGame(game);
-            List<StoreBlock> storeBlocks = initialStoreBlocks(game);
-            List<StoreRelic> storeRelics = relicSelector.getRandomRelics(store, playerRelics);
+            initialStoreBlocks(game);
+            relicSelector.getRandomRelics(store, playerRelics);
 
             boolean overworkBlock = gameRelicRepository.findByGameAndRelicNumber(game, 7).isPresent();//초과 근무 블록
             if(overworkBlock) {

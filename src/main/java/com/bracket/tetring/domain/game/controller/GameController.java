@@ -23,7 +23,7 @@ public class GameController {
         return gameService.checkPlayingGame();
     }
 
-    @GetMapping("/ranking")
+    @PostMapping("/ranking")
     public ResponseEntity<?> getPlayerRankings(@Valid @RequestBody GetPlayerRankingRequestDto requestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             // 에러 메시지 추출

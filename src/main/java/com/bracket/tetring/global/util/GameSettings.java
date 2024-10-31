@@ -7,7 +7,7 @@ public class GameSettings {
     public static final int REROLL_INITIAL_PRICE = 2;
     public static final int REROLL_UPDATE_PRICE = 1;
     public static final int[] ROUND_GOALS = {600, 1400, 2800, 3600, 7200, 12000, 22000, 54000, 180000, 340000, 720000, 1508200};
-    public static final int[] MONEY_LEVEL_UP_PRICE = {3, 5, 10, 20, 0};
+    public static final int[] MONEY_LEVEL_UP_PRICE = {2, 4, 7, 15, 0};
     public static final int[] MONEY_GET = {1, 3, 5, 10, 20};
 
     public static final Block[] BLOCKS = {
